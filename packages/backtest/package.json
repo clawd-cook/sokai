@@ -1,0 +1,22 @@
+{
+  "name": "@sokai/backtest",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./playwright": "./src/playwright-driver.ts"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sokai/runtime": "workspace:*",
+    "@sokai/session": "workspace:*",
+    "playwright": "1.62.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.0.0"
+  }
+}
