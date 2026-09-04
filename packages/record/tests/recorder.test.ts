@@ -55,4 +55,29 @@ describe("createRecorderForPage", () => {
     expect(bundle.network[0]?.requestHeaders.authorization).toBe("[REDACTED]");
     expect(bundle.index.keyframes.length).toBeGreaterThanOrEqual(1);
   });
+
+  it("captures a keyframe on stop when none were taken during the session", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "sokai-rec-"));
+    const page = {
+      url: () => "https://example.com/compose-pool",
+      viewportSize: () => ({ width: 1280, height: 720 }),
+      on: () => undefined,
+      evaluate: vi.fn(async () => ({
+        role: "document",
+        name: "合成池管理",
+        children: [{ role: "table", name: "data" }],
+      })),
+      screenshot: vi.fn(async () => Buffer.from([9, 9, 9])),
+    };
+
+    const rec = await createRecorderForPage(page as any, dir, {
+      pilotTag: "compose-pool-list",
+    });
+    const out = await rec.stop();
+    const bundle = await readSessionBundle(out);
+    expect(bundle.index.keyframes.length).toBeGreaterThanOrEqual(1);
+    expect(bundle.index.keyframes[0]?.domFile).toMatch(/^dom\//);
+    expect(page.screenshot).toHaveBeenCalled();
+    expect(page.evaluate).toHaveBeenCalled();
+  });
 });

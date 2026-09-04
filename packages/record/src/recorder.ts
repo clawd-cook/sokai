@@ -106,9 +106,21 @@ const EXTRACT_DOM_SCRIPT = `(() => {
     if (!name && el.labels && el.labels[0]) {
       name = (el.labels[0].textContent || "").trim() || undefined;
     }
-    if (!name) {
-      const text = (el.textContent || "").trim().replace(/\\s+/g, " ");
-      if (text) name = text.slice(0, 80);
+    const isShell = tag === "html" || tag === "body" || tag === "head";
+    const isControl = /^(input|textarea|select|button|a|label|h[1-6]|th|td|option|legend)$/.test(tag)
+      || /^(button|textbox|searchbox|combobox|link|heading|columnheader|rowheader|checkbox|radio|option|menuitem)$/.test(role || "");
+    if (!name && !isShell) {
+      if (isControl) {
+        const text = (el.textContent || "").trim().replace(/\\s+/g, " ");
+        if (text) name = text.slice(0, 80);
+      } else {
+        let own = "";
+        for (const n of Array.from(el.childNodes)) {
+          if (n.nodeType === 3) own += n.textContent || "";
+        }
+        own = own.trim().replace(/\\s+/g, " ");
+        if (own) name = own.slice(0, 80);
+      }
     }
     const children = [];
     for (const child of Array.from(el.children)) {
@@ -239,6 +251,14 @@ export async function createRecorderForPage(
     if (stopped) return outDir;
     stopped = true;
 
+    if (index.keyframes.length === 0) {
+      try {
+        await captureKeyframe("on-stop");
+      } catch {
+        // Screenshot/DOM failure must not block writing the rest of the bundle.
+      }
+    }
+
     const viewport = metaPartial.viewport ?? page.viewportSize() ?? { width: 1280, height: 720 };
     const meta: SessionMeta = {
       schemaVersion: SESSION_SCHEMA_VERSION,
@@ -338,6 +358,11 @@ export async function startRecording(options: RecordOptions): Promise<RecordingH
 
   await installPageListeners(page, recorder);
   await page.goto(options.url, { waitUntil: "domcontentloaded" });
+  try {
+    await recorder.captureKeyframe("after-nav");
+  } catch {
+    // stop() captures a snapshot if this navigation keyframe fails.
+  }
 
   return {
     async stop() {
