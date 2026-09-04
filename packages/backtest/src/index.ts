@@ -7,6 +7,7 @@ export {
   collectActionIds,
   collectRegionIds,
   criticalRegionIds,
+  CRITICAL_REGION_IDS,
   NAME_TO_ACTION_ID,
 } from "./locate.js";
 export type { LocatePlan } from "./locate.js";

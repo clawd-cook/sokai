@@ -34,12 +34,11 @@ export function collectRegionIds(node: SchemaNode, out: string[] = []): string[]
   return out;
 }
 
-export function criticalRegionIds(schema: PageSchema): string[] {
-  const regions = collectRegionIds(schema.root);
-  const preferred = ["region-search", "region-table"];
-  const fromPreferred = preferred.filter((id) => regions.includes(id));
-  if (fromPreferred.length > 0) return fromPreferred;
-  return regions.filter((id) => id === "region-search" || id === "region-table");
+/** Pilot critical structure selectors — always asserted, even if omitted from the schema tree. */
+export const CRITICAL_REGION_IDS = ["region-search", "region-table"] as const;
+
+export function criticalRegionIds(_schema?: PageSchema): string[] {
+  return [...CRITICAL_REGION_IDS];
 }
 
 export type LocatePlan =

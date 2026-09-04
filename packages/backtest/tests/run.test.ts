@@ -320,4 +320,30 @@ describe("runBacktest", () => {
       true,
     );
   });
+
+  it("always asserts region-search and region-table even when schema omits them", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "sokai-backtest-noregion-"));
+    const bare: PageSchema = {
+      schemaVersion: 1,
+      id: "bare",
+      title: "bare",
+      dataSources: [],
+      root: { id: "root", type: "Page", provenance: "rule", props: {} },
+    };
+    const { schemaPath, bundleDir } = await writeFixture(dir, [], bare);
+    const driver = createRecordingDriver();
+
+    const report = await runBacktest({
+      bundleDir,
+      schemaPath,
+      mode: "mock",
+      driver,
+    });
+
+    expect(driver.calls).toContain("assertRegion:region-search");
+    expect(driver.calls).toContain("assertRegion:region-table");
+    expect(report.steps.some((step) => step.actionId === "assert:region-search")).toBe(true);
+    expect(report.steps.some((step) => step.actionId === "assert:region-table")).toBe(true);
+  });
 });
+
