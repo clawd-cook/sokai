@@ -89,6 +89,31 @@ describe("schema rules", () => {
     ]);
     expect(findById(enriched.root, "hacked-new-id")).toBeUndefined();
   });
+
+  it("marks partial on soft-invalid model JSON without mutating skeleton", async () => {
+    const dom = JSON.parse(
+      await readFile(join(here, "fixtures/compose-pool-dom.json"), "utf8"),
+    );
+    const root = buildSkeletonFromDom(dom);
+    const skeleton = {
+      schemaVersion: 1,
+      id: "marketing.coupon.composePool.list",
+      title: "合成池管理",
+      root,
+      dataSources: [],
+      partial: false,
+    };
+    const softInvalidLlm: LlmClient = {
+      async completeJson() {
+        return null;
+      },
+    };
+    const soft = await enrichWithModel(skeleton, { domText: "…", llm: softInvalidLlm });
+    expect(soft.partial).toBe(true);
+    expect(findByType(soft.root, "SearchForm")?.id).toBe("region-search");
+    expect(findByType(soft.root, "Table")?.id).toBe("region-table");
+    expect(soft.root).toEqual(skeleton.root);
+  });
 });
 
 function collectTypes(node: any): string[] {

@@ -27,10 +27,25 @@ function applyPatches(node: SchemaNode, patches: Map<string, Record<string, unkn
   return next;
 }
 
-function extractPatches(raw: unknown): ModelPatch[] {
-  if (typeof raw !== "object" || raw === null) return [];
-  const patches = (raw as { patches?: unknown }).patches;
-  if (!Array.isArray(patches)) return [];
+type ParsePatchesResult =
+  | { ok: true; patches: ModelPatch[] }
+  | { ok: false };
+
+/**
+ * Accept only `{ patches: unknown[] }`. Soft-invalid envelopes
+ * (`null`, non-object, missing/non-array `patches`) are failures.
+ */
+function parsePatchesResponse(raw: unknown): ParsePatchesResult {
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    return { ok: false };
+  }
+  if (!Object.prototype.hasOwnProperty.call(raw, "patches")) {
+    return { ok: false };
+  }
+  const patches = (raw as { patches: unknown }).patches;
+  if (!Array.isArray(patches)) {
+    return { ok: false };
+  }
   const out: ModelPatch[] = [];
   for (const item of patches) {
     if (typeof item !== "object" || item === null) continue;
@@ -41,7 +56,7 @@ function extractPatches(raw: unknown): ModelPatch[] {
     }
     out.push({ id, props: props as Record<string, unknown> });
   }
-  return out;
+  return { ok: true, patches: out };
 }
 
 function buildEnrichPrompt(skeleton: PageSchema, domText: string): string {
@@ -61,7 +76,7 @@ function buildEnrichPrompt(skeleton: PageSchema, domText: string): string {
 
 /**
  * Merge model-suggested props into existing skeleton nodes only.
- * On LLM failure, returns the skeleton with `partial: true`.
+ * On LLM throw or soft-invalid JSON, returns the skeleton with `partial: true`.
  */
 export async function enrichWithModel(
   skeleton: PageSchema,
@@ -69,12 +84,19 @@ export async function enrichWithModel(
 ): Promise<PageSchema> {
   try {
     const raw = await ctx.llm.completeJson(buildEnrichPrompt(skeleton, ctx.domText));
-    const patches = extractPatches(raw);
+    const parsed = parsePatchesResponse(raw);
+    if (!parsed.ok) {
+      return {
+        ...skeleton,
+        partial: true,
+      };
+    }
+
     const knownIds = new Set<string>();
     collectIds(skeleton.root, knownIds);
 
     const allowed = new Map<string, Record<string, unknown>>();
-    for (const patch of patches) {
+    for (const patch of parsed.patches) {
       if (!knownIds.has(patch.id)) continue;
       allowed.set(patch.id, patch.props);
     }
