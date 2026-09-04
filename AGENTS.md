@@ -2,7 +2,7 @@
 
 ## 项目概览
 
-**Sokai（溯洄）**：页面「录制 → Schema → 回测」工具链的 monorepo。产品方向见 `docs/superpowers/`。
+**Sokai（溯洄）**：页面「录制 → Schema → 回测」工具链的 monorepo。产品方向见 `docs/superpowers/`；当前迭代规格与计划见 `docs/superpowers/specs/2026-09-05-record-schema-backtest-design.md`、`docs/superpowers/plans/2026-09-05-record-schema-backtest.md`；离线 smoke 见 `README.md`。
 
 技术栈：Node.js `24.20.0`、pnpm `11.23.0`、TypeScript。
 
