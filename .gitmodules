@@ -1,0 +1,3 @@
+[submodule "apps/yy-modules"]
+	path = apps/yy-modules
+	url = git@coding.jd.com:webapp/yy-modules.git
