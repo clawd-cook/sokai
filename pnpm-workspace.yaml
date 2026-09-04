@@ -1,5 +1,8 @@
 packages:
   - "packages/*"
 
+allowBuilds:
+  esbuild: true
+
 registry:
   default: http://registry.m.jd.com/
