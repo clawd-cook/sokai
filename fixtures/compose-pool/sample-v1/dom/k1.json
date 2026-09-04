@@ -1,0 +1,28 @@
+{
+  "role": "document",
+  "name": "合成池管理",
+  "children": [
+    { "role": "heading", "name": "合成池管理", "tag": "h2" },
+    {
+      "role": "form",
+      "name": "search",
+      "children": [
+        { "role": "textbox", "name": "品池 ID", "attrs": { "name": "combinateMsPoolId" } },
+        { "role": "button", "name": "搜索" },
+        { "role": "button", "name": "重置" }
+      ]
+    },
+    {
+      "role": "table",
+      "name": "data",
+      "children": [
+        { "role": "columnheader", "name": "品池 ID" },
+        { "role": "columnheader", "name": "策略 ID" },
+        { "role": "button", "name": "导出" },
+        { "role": "link", "name": "更新" }
+      ]
+    },
+    { "role": "navigation", "name": "pagination", "attrs": { "aria-label": "pagination" } },
+    { "role": "dialog", "name": "黑名单更新", "children": [] }
+  ]
+}

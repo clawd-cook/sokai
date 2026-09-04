@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "id": "compose-pool-list",
+  "title": "合成池管理",
+  "root": {
+    "id": "root",
+    "type": "Page",
+    "props": {
+      "name": "合成池管理"
+    },
+    "children": [
+      {
+        "id": "region-heading",
+        "type": "Heading",
+        "props": {
+          "text": "合成池管理"
+        },
+        "provenance": "rule"
+      },
+      {
+        "id": "region-search",
+        "type": "SearchForm",
+        "props": {
+          "title": "search"
+        },
+        "children": [
+          {
+            "id": "field-combinateMsPoolId",
+            "type": "Field",
+            "props": {
+              "label": "品池 ID",
+              "name": "combinateMsPoolId"
+            },
+            "provenance": "rule"
+          },
+          {
+            "id": "action-search-btn",
+            "type": "Button",
+            "props": {
+              "label": "搜索"
+            },
+            "actionId": "action-search",
+            "provenance": "rule"
+          },
+          {
+            "id": "action-reset-btn",
+            "type": "Button",
+            "props": {
+              "label": "重置"
+            },
+            "actionId": "action-reset",
+            "provenance": "rule"
+          }
+        ],
+        "provenance": "rule"
+      },
+      {
+        "id": "region-table",
+        "type": "Table",
+        "props": {
+          "columns": [
+            {
+              "label": "品池 ID"
+            },
+            {
+              "label": "策略 ID"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "action-export",
+            "type": "Button",
+            "props": {
+              "label": "导出"
+            },
+            "actionId": "action-export",
+            "provenance": "rule"
+          },
+          {
+            "id": "action-update",
+            "type": "Button",
+            "props": {
+              "label": "更新"
+            },
+            "actionId": "action-open-blacklist-dialog",
+            "provenance": "rule"
+          }
+        ],
+        "provenance": "rule"
+      },
+      {
+        "id": "region-pagination",
+        "type": "Pagination",
+        "props": {
+          "label": "pagination"
+        },
+        "actionId": "action-page-next",
+        "provenance": "rule"
+      },
+      {
+        "id": "region-dialog-blacklist",
+        "type": "Dialog",
+        "props": {
+          "title": "黑名单更新"
+        },
+        "children": [],
+        "provenance": "rule"
+      }
+    ],
+    "provenance": "rule"
+  },
+  "dataSources": [
+    {
+      "id": "ds-post-api-combinatePool-page",
+      "method": "POST",
+      "urlPattern": "/api/combinatePool/page",
+      "networkEntryId": "n1"
+    }
+  ]
+}

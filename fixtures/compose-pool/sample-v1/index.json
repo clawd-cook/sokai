@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "keyframes": [
+    {
+      "id": "k1",
+      "file": "keyframes/k1.png",
+      "domFile": "dom/k1.json",
+      "actionFrom": "a2",
+      "actionTo": "a2",
+      "at": 2
+    }
+  ]
+}

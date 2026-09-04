@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "url": "https://example.com/compose-pool",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "startedAt": "2026-09-05T00:00:00.000Z",
+  "endedAt": "2026-09-05T00:01:00.000Z",
+  "pilotTag": "compose-pool-list"
+}

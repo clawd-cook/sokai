@@ -1,0 +1,6 @@
+{"id":"a0","timestamp":0,"type":"navigate","url":"https://example.com/compose-pool"}
+{"id":"a1","timestamp":1,"type":"fill","target":{"strategy":"label","label":"品池 ID"},"value":"pool-1"}
+{"id":"a2","timestamp":2,"type":"click","target":{"strategy":"role","role":"button","name":"搜索"}}
+{"id":"a3","timestamp":3,"type":"click","target":{"strategy":"role","role":"button","name":"下一页"}}
+{"id":"a4","timestamp":4,"type":"click","target":{"strategy":"role","role":"link","name":"更新"}}
+{"id":"a5","timestamp":5,"type":"click","target":{"strategy":"role","role":"button","name":"关闭"}}
