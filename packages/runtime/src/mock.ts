@@ -1,4 +1,5 @@
 import type { DataSource, NetworkEntry } from "@sokai/session";
+import { matchesUrlPattern } from "@sokai/session";
 
 export class MockMissError extends Error {
   readonly fingerprint: string;
@@ -18,15 +19,6 @@ function fingerprintPath(url: string): string {
   } catch {
     return url;
   }
-}
-
-function patternToRegExp(pattern: string): RegExp {
-  const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*\*/g, ".*");
-  return new RegExp(`^${escaped}$`);
-}
-
-function matchesUrlPattern(pattern: string, url: string): boolean {
-  return patternToRegExp(pattern).test(url);
 }
 
 function requestMethod(input: RequestInfo | URL, init?: RequestInit): string {

@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { mountPreview } from "../src/mount.js";
-import type { PageSchema } from "@sokai/session";
+import type { NetworkEntry, PageSchema } from "@sokai/session";
 
 const schema: PageSchema = {
   schemaVersion: 1,
@@ -47,7 +47,39 @@ const schema: PageSchema = {
   },
 };
 
+const listNetwork: NetworkEntry[] = [
+  {
+    id: "n1",
+    timestamp: 0,
+    method: "POST",
+    url: "https://example.com/api/combinatePool/page",
+    status: 200,
+    requestHeaders: {},
+    responseHeaders: { "content-type": "application/json" },
+    responseBody: '{"list":[]}',
+  },
+];
+
+const schemaWithList: PageSchema = {
+  ...schema,
+  dataSources: [
+    {
+      id: "ds-post-api-combinatePool-page",
+      method: "POST",
+      urlPattern: "/api/combinatePool/page",
+      networkEntryId: "n1",
+    },
+  ],
+};
+
 describe("mountPreview", () => {
+  let restoreFetch: (() => void) | undefined;
+
+  afterEach(() => {
+    restoreFetch?.();
+    restoreFetch = undefined;
+  });
+
   it("exposes data-sokai-action hooks", () => {
     const el = document.createElement("div");
     document.body.appendChild(el);
@@ -86,5 +118,54 @@ describe("mountPreview", () => {
     expect(el.querySelector('[data-sokai-region="region-pagination"]')).toBeTruthy();
     expect(el.querySelector('[data-sokai-action="action-page-next"]')).toBeNull();
     app.unmount();
+  });
+
+  it("fetches the mapped list dataSource when search is clicked", async () => {
+    const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
+    const previous = globalThis.fetch;
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+    restoreFetch = () => {
+      globalThis.fetch = previous;
+    };
+
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+    const s = structuredClone(schemaWithList);
+    const app = mountPreview(el, s, { mock: false, network: listNetwork });
+    const search = el.querySelector('[data-sokai-action="action-search"]') as HTMLButtonElement;
+    search.click();
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    const [url, init] = fetchMock.mock.calls[0]!;
+    expect(url).toBe("https://example.com/api/combinatePool/page");
+    expect((init as RequestInit | undefined)?.method).toBe("POST");
+    app.unmount();
+    el.remove();
+  });
+
+  it("fetches the mapped list dataSource when pagination is clicked", async () => {
+    const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
+    const previous = globalThis.fetch;
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+    restoreFetch = () => {
+      globalThis.fetch = previous;
+    };
+
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+    const s = structuredClone(schemaWithList);
+    s.root.children!.push({
+      id: "region-pagination",
+      type: "Pagination",
+      provenance: "rule",
+      props: { label: "pagination" },
+      actionId: "action-page-next",
+    });
+    const app = mountPreview(el, s, { mock: false, network: listNetwork });
+    const pager = el.querySelector('[data-sokai-action="action-page-next"]') as HTMLElement;
+    pager.click();
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://example.com/api/combinatePool/page");
+    app.unmount();
+    el.remove();
   });
 });

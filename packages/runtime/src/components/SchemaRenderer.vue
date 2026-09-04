@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, inject, type Ref } from "vue";
-import type { SchemaNode } from "@sokai/session";
+import type { NetworkEntry, PageSchema, SchemaNode } from "@sokai/session";
 import SchemaRenderer from "./SchemaRenderer.vue";
+import { isListFetchAction, resolveListRequest } from "../list-fetch.js";
 
 const props = defineProps<{ node: SchemaNode }>();
 
 const dialogOpen = inject<Ref<boolean>>("sokaiDialogOpen")!;
+const schema = inject<PageSchema | undefined>("sokaiSchema", undefined);
+const network = inject<NetworkEntry[] | undefined>("sokaiNetwork") ?? [];
 
 const REGION_TYPES = new Set(["SearchForm", "Table", "Pagination", "Dialog"]);
 
@@ -32,9 +35,26 @@ const columns = computed(() => {
   return raw as Array<{ label?: string; prop?: string }>;
 });
 
+function triggerListFetch() {
+  if (!schema) return;
+  const req = resolveListRequest(schema, network ?? []);
+  if (!req) return;
+  void fetch(req.url, { method: req.method });
+}
+
 function onButtonClick() {
   if (props.node.actionId === "action-open-blacklist-dialog") {
     dialogOpen.value = true;
+    return;
+  }
+  if (isListFetchAction(props.node.actionId)) {
+    triggerListFetch();
+  }
+}
+
+function onPaginationClick() {
+  if (isListFetchAction(props.node.actionId)) {
+    triggerListFetch();
   }
 }
 
@@ -85,7 +105,12 @@ function closeDialog() {
     </table>
   </section>
 
-  <nav v-else-if="node.type === 'Pagination'" class="sokai-pagination" v-bind="hookAttrs">
+  <nav
+    v-else-if="node.type === 'Pagination'"
+    class="sokai-pagination"
+    v-bind="hookAttrs"
+    @click="onPaginationClick"
+  >
     <SchemaRenderer v-for="child in node.children ?? []" :key="child.id" :node="child" />
     <button v-if="!(node.children?.length)" type="button">下一页</button>
   </nav>

@@ -32,6 +32,7 @@ export function mountPreview(
       const dialogOpen = ref(false);
       provide("sokaiDialogOpen", dialogOpen);
       provide("sokaiSchema", schema);
+      provide("sokaiNetwork", opts?.network ?? []);
       return () =>
         h("div", { class: "sokai-preview-root" }, [
           h("h1", { class: "sokai-preview-title" }, schema.title),
