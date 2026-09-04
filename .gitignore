@@ -1,0 +1,7 @@
+.worktrees/
+node_modules/
+dist/
+*.local
+fixtures/**/clips/**
+tools/page-backtest/artifacts/
+.superpowers/
