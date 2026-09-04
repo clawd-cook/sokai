@@ -32,3 +32,5 @@ export type { SessionBundleWriteInput, SessionBundleReadOutput } from "./bundle.
 export { parsePageSchema, writePageSchema } from "./page-schema.js";
 
 export { writeBacktestReport } from "./report.js";
+
+export { pathnameOfUrl, toUrlPattern, matchesUrlPattern } from "./url-pattern.js";
