@@ -27,12 +27,76 @@ describe("schema rules", () => {
     expect(findByType(root, "Table")?.id).toBe("region-table");
   });
 
+  it("does not treat html/body named by page textContent as SearchForm", async () => {
+    const dom = JSON.parse(
+      await readFile(join(here, "fixtures/recorder-shaped-dom.json"), "utf8"),
+    );
+    const root = buildSkeletonFromDom(dom);
+    assertSkeletonHasCriticalRegions(root);
+    expect(findByType(root, "SearchForm")?.id).toBe("region-search");
+    expect(findByType(root, "Table")?.id).toBe("region-table");
+    const search = findByType(root, "SearchForm");
+    expect(search?.children?.some((c: { type: string }) => c.type === "Field")).toBe(true);
+    expect(search?.children?.some((c: { actionId?: string }) => c.actionId === "action-search")).toBe(
+      true,
+    );
+  });
+
+  it("keeps walking when an empty SearchForm would otherwise swallow the page", () => {
+    const root = buildSkeletonFromDom({
+      role: "document",
+      name: "合成池管理 搜索",
+      children: [
+        {
+          tag: "html",
+          name: "搜索 表格数据",
+          children: [
+            {
+              tag: "body",
+              name: "搜索 表格数据",
+              children: [
+                { role: "form", name: "搜索", children: [] },
+                { role: "table", name: "data", tag: "table" },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    expect(findByType(root, "Table")?.id).toBe("region-table");
+    expect(collectTypes(root).filter((t) => t === "SearchForm")).not.toContain("html");
+  });
+
   it("fails hard when table missing", () => {
     const root = buildSkeletonFromDom({
       role: "document",
-      children: [{ role: "form", name: "search", children: [] }],
+      children: [
+        {
+          role: "form",
+          name: "search",
+          children: [{ role: "textbox", name: "q", attrs: { name: "q" } }],
+        },
+      ],
     });
     expect(() => assertSkeletonHasCriticalRegions(root)).toThrow(/table/i);
+  });
+
+  it("emits host-agnostic glob urlPatterns from recorded absolute URLs", () => {
+    const sources = mapDataSources([
+      {
+        id: "n1",
+        timestamp: 0,
+        method: "POST",
+        url: "https://x.com/api/combinatePool/page",
+        status: 200,
+        requestHeaders: {},
+        responseHeaders: {},
+        responseBody: "{}",
+      },
+    ]);
+    expect(sources).toHaveLength(1);
+    expect(sources[0]?.urlPattern).toBe("**/api/combinatePool/page**");
+    expect(sources[0]?.method).toBe("POST");
   });
 
   it("enrichment cannot rename rule ids and marks partial on llm failure", async () => {

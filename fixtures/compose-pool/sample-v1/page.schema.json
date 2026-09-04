@@ -114,7 +114,7 @@
     {
       "id": "ds-post-api-combinatePool-page",
       "method": "POST",
-      "urlPattern": "/api/combinatePool/page",
+      "urlPattern": "**/api/combinatePool/page**",
       "networkEntryId": "n1"
     }
   ]

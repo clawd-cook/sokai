@@ -1,4 +1,5 @@
 import type { DataSource, NetworkEntry, SchemaNode } from "@sokai/session";
+import { pathnameOfUrl, toUrlPattern } from "@sokai/session";
 
 interface DomNode {
   role?: string;
@@ -7,6 +8,10 @@ interface DomNode {
   attrs?: Record<string, string>;
   children?: DomNode[];
 }
+
+const PAGE_SHELL_TAGS = new Set(["html", "body", "head"]);
+const FIELD_TAGS = new Set(["input", "select", "textarea"]);
+const FIELD_ROLES = new Set(["textbox", "searchbox", "combobox"]);
 
 function isDomNode(value: unknown): value is DomNode {
   return typeof value === "object" && value !== null;
@@ -20,13 +25,70 @@ function attrsOf(node: DomNode): Record<string, string> {
   return node.attrs ?? {};
 }
 
+function tagOf(node: DomNode): string {
+  return (node.tag ?? "").toLowerCase();
+}
+
+function isPageShell(node: DomNode): boolean {
+  return node.role === "document" || PAGE_SHELL_TAGS.has(tagOf(node));
+}
+
+function looksLikeFormTag(node: DomNode): boolean {
+  return node.role === "form" || node.role === "search" || tagOf(node) === "form";
+}
+
+function isFieldNode(node: DomNode): boolean {
+  return FIELD_ROLES.has(node.role ?? "") || FIELD_TAGS.has(tagOf(node));
+}
+
+function isButtonNode(node: DomNode): boolean {
+  return node.role === "button" || tagOf(node) === "button";
+}
+
+function isTableNode(node: DomNode): boolean {
+  return node.role === "table" || tagOf(node) === "table";
+}
+
+function containsTableOrDialog(node: DomNode): boolean {
+  if (isTableNode(node) || node.role === "dialog") return true;
+  return (node.children ?? []).some(containsTableOrDialog);
+}
+
+function isSearchButtonLabel(label: string): boolean {
+  const lower = label.toLowerCase();
+  return label === "搜索" || lower === "search";
+}
+
+/** Compact region: own subtree has fields + a search button, and is not a page-sized container. */
+function isCompactSearchRegion(node: DomNode): boolean {
+  if (isPageShell(node) || containsTableOrDialog(node)) return false;
+  let hasField = false;
+  let hasSearchButton = false;
+  walkDom(node, (child) => {
+    if (isFieldNode(child)) hasField = true;
+    if (isButtonNode(child) && isSearchButtonLabel(textOf(child))) hasSearchButton = true;
+  });
+  return hasField && hasSearchButton;
+}
+
+function walkDom(node: DomNode, visit: (n: DomNode) => void): void {
+  for (const child of node.children ?? []) {
+    visit(child);
+    walkDom(child, visit);
+  }
+}
+
+/**
+ * SearchForm only from form-like structure or a compact fields+search subtree.
+ * Never from document/html/body or concatenated descendant text (e.g. a page named "搜索").
+ */
 function looksLikeSearch(node: DomNode): boolean {
-  if (node.role === "form") return true;
-  const name = textOf(node).toLowerCase();
-  if (name.includes("search") || name.includes("搜索")) return true;
+  if (isPageShell(node)) return false;
+  if (looksLikeFormTag(node)) return true;
   const attrs = attrsOf(node);
   const hay = `${attrs["aria-label"] ?? ""} ${attrs.name ?? ""} ${attrs.id ?? ""}`.toLowerCase();
-  return hay.includes("search") || hay.includes("搜索");
+  if (hay.includes("search") || hay.includes("搜索")) return true;
+  return isCompactSearchRegion(node);
 }
 
 function looksLikePagination(node: DomNode): boolean {
@@ -86,19 +148,29 @@ function mapSearchButton(node: DomNode): SchemaNode | undefined {
   return undefined;
 }
 
-function mapSearchForm(node: DomNode): SchemaNode {
-  const children: SchemaNode[] = [];
-  let fieldIndex = 0;
+function collectSearchControls(
+  node: DomNode,
+  children: SchemaNode[],
+  fieldIndex: { n: number },
+): void {
   for (const child of node.children ?? []) {
-    if (child.role === "textbox" || child.tag === "input") {
-      children.push(mapField(child, fieldIndex++));
+    if (isTableNode(child) || child.role === "dialog") continue;
+    if (isFieldNode(child)) {
+      children.push(mapField(child, fieldIndex.n++));
       continue;
     }
-    if (child.role === "button" || child.tag === "button") {
+    if (isButtonNode(child)) {
       const button = mapSearchButton(child);
       if (button) children.push(button);
+      continue;
     }
+    collectSearchControls(child, children, fieldIndex);
   }
+}
+
+function mapSearchForm(node: DomNode): SchemaNode {
+  const children: SchemaNode[] = [];
+  collectSearchControls(node, children, { n: 0 });
   return makeNode({
     id: "region-search",
     type: "SearchForm",
@@ -187,25 +259,30 @@ function mapDialog(node: DomNode): SchemaNode {
 }
 
 function walkRegions(node: DomNode, out: SchemaNode[]): void {
-  const tag = (node.tag ?? "").toLowerCase();
+  const tag = tagOf(node);
   const isHeading = node.role === "heading" || tag === "h1" || tag === "h2";
   if (isHeading) {
     out.push(mapHeading(node));
     return;
   }
   if (looksLikeSearch(node)) {
-    out.push(mapSearchForm(node));
-    return;
-  }
-  if (node.role === "table" || tag === "table") {
+    const mapped = mapSearchForm(node);
+    const hasControls = (mapped.children?.length ?? 0) > 0;
+    if (hasControls) {
+      out.push(mapped);
+      return;
+    }
+    if (looksLikeFormTag(node)) {
+      out.push(mapped);
+    }
+    // Empty / page-sized match: do not return — keep walking so Table is still found.
+  } else if (isTableNode(node)) {
     out.push(mapTable(node));
     return;
-  }
-  if (looksLikePagination(node)) {
+  } else if (looksLikePagination(node)) {
     out.push(mapPagination(node));
     return;
-  }
-  if (node.role === "dialog") {
+  } else if (node.role === "dialog") {
     out.push(mapDialog(node));
     return;
   }
@@ -238,29 +315,20 @@ export function buildSkeletonFromDom(dom: unknown): SchemaNode {
   });
 }
 
-function pathnameOf(url: string): string {
-  try {
-    return new URL(url).pathname;
-  } catch {
-    const path = url.split("?")[0] ?? url;
-    return path.startsWith("/") ? path : `/${path}`;
-  }
-}
-
 /**
- * One DataSource per unique method + pathname; `urlPattern` is the pathname (glob-ready).
+ * One DataSource per unique method + pathname; `urlPattern` is a host-agnostic glob.
  */
 export function mapDataSources(network: NetworkEntry[]): DataSource[] {
   const seen = new Map<string, DataSource>();
   for (const entry of network) {
-    const pathname = pathnameOf(entry.url);
+    const pathname = pathnameOfUrl(entry.url);
     const key = `${entry.method.toUpperCase()} ${pathname}`;
     if (seen.has(key)) continue;
     const id = `ds-${entry.method.toLowerCase()}-${pathname.replace(/[^\w]+/g, "-").replace(/^-|-$/g, "")}`;
     seen.set(key, {
       id,
       method: entry.method.toUpperCase(),
-      urlPattern: pathname,
+      urlPattern: toUrlPattern(pathname),
       networkEntryId: entry.id,
     });
   }

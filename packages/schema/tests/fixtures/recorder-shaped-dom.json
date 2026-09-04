@@ -1,0 +1,55 @@
+{
+  "role": "document",
+  "name": "合成池管理",
+  "children": [
+    {
+      "tag": "html",
+      "name": "合成池管理 品池 ID 搜索 重置 品池 ID 策略 ID 导出 更新",
+      "children": [
+        {
+          "tag": "body",
+          "name": "合成池管理 品池 ID 搜索 重置 品池 ID 策略 ID 导出 更新",
+          "children": [
+            {
+              "tag": "div",
+              "name": "合成池管理 品池 ID 搜索 重置 品池 ID 策略 ID 导出 更新",
+              "children": [
+                { "role": "heading", "name": "合成池管理", "tag": "h2" },
+                {
+                  "tag": "div",
+                  "attrs": { "id": "search-area" },
+                  "children": [
+                    {
+                      "role": "textbox",
+                      "name": "品池 ID",
+                      "attrs": { "name": "combinateMsPoolId" }
+                    },
+                    { "role": "button", "name": "搜索" },
+                    { "role": "button", "name": "重置" }
+                  ]
+                },
+                {
+                  "role": "table",
+                  "name": "data",
+                  "tag": "table",
+                  "children": [
+                    { "role": "columnheader", "name": "品池 ID" },
+                    { "role": "columnheader", "name": "策略 ID" },
+                    { "role": "button", "name": "导出" },
+                    { "role": "link", "name": "更新" }
+                  ]
+                },
+                {
+                  "role": "navigation",
+                  "name": "pagination",
+                  "attrs": { "aria-label": "pagination" }
+                },
+                { "role": "dialog", "name": "黑名单更新", "children": [] }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
