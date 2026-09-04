@@ -11,15 +11,39 @@ importers:
       '@json-render/core':
         specifier: 0.20.0
         version: 0.20.0(zod@4.5.4)
+      '@json-render/jotai':
+        specifier: 0.20.0
+        version: 0.20.0(jotai@2.20.2(@babel/core@8.0.1)(@babel/template@8.0.0)(@types/react@19.2.18)(react@19.2.8))(zod@4.5.4)
+      '@json-render/redux':
+        specifier: 0.20.0
+        version: 0.20.0(zod@4.5.4)
       '@json-render/vue':
         specifier: 0.20.0
         version: 0.20.0(vue@3.5.42)(zod@4.5.4)
+      '@json-render/xstate':
+        specifier: 0.20.0
+        version: 0.20.0(@xstate/store@4.2.3)(zod@4.5.4)
+      '@json-render/zustand':
+        specifier: 0.20.0
+        version: 0.20.0(zod@4.5.4)(zustand@5.0.15(@types/react@19.2.18)(immer@11.1.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8)))
       ai:
         specifier: 7.0.91
         version: 7.0.91(zod@4.5.4)
       playwright:
         specifier: 1.62.1
         version: 1.62.1
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+      vue:
+        specifier: 3.5.42
+        version: 3.5.42
+      zod:
+        specifier: 4.5.4
+        version: 4.5.4
 
 packages:
 
@@ -39,30 +63,113 @@ packages:
     resolution: {integrity: sha1-HFHU4Jkd6ldzyKdPnaFsUlJ774w=, tarball: http://registry.m.jd.com/@ai-sdk/provider/download/@ai-sdk/provider-4.0.10.tgz}
     engines: {node: '>=22'}
 
+  '@babel/code-frame@8.0.0':
+    resolution: {integrity: sha1-83Tqk5IBH/7PIjgF3Q2TFWBuW78=, tarball: http://registry.m.jd.com/@babel/code-frame/download/@babel/code-frame-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/compat-data@8.0.0':
+    resolution: {integrity: sha1-54DrYFLYzurq3Tps2C3aRwqUViI=, tarball: http://registry.m.jd.com/@babel/compat-data/download/@babel/compat-data-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/core@8.0.1':
+    resolution: {integrity: sha1-3LEz093PsrWmVY2gO/JAMZ2guMg=, tarball: http://registry.m.jd.com/@babel/core/download/@babel/core-8.0.1.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/generator@8.0.0':
+    resolution: {integrity: sha1-JLe1OnT6jnTMI3fgVP7O9Nza2pY=, tarball: http://registry.m.jd.com/@babel/generator/download/@babel/generator-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/helper-compilation-targets@8.0.0':
+    resolution: {integrity: sha1-Y/Iw9CfJ6oIyPYKck19hkNk7NzY=, tarball: http://registry.m.jd.com/@babel/helper-compilation-targets/download/@babel/helper-compilation-targets-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/helper-globals@8.0.0':
+    resolution: {integrity: sha1-yTeJ1sHC8bZal6B1FcRxoElVm/E=, tarball: http://registry.m.jd.com/@babel/helper-globals/download/@babel/helper-globals-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
   '@babel/helper-string-parser@7.29.7':
     resolution: {integrity: sha1-fwhx2Zgk0jE31g+G/PYTD9WhtR8=, tarball: http://registry.m.jd.com/@babel/helper-string-parser/download/@babel/helper-string-parser-7.29.7.tgz}
     engines: {node: '>=6.9.0'}
 
+  '@babel/helper-string-parser@8.0.0':
+    resolution: {integrity: sha1-TUfZrTXQ9b19ICs0i/VYMoo0eXc=, tarball: http://registry.m.jd.com/@babel/helper-string-parser/download/@babel/helper-string-parser-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
   '@babel/helper-validator-identifier@7.29.7':
     resolution: {integrity: sha1-vYcITO0MeW7Ea9pJLeboPSnon8I=, tarball: http://registry.m.jd.com/@babel/helper-validator-identifier/download/@babel/helper-validator-identifier-7.29.7.tgz}
     engines: {node: '>=6.9.0'}
+
+  '@babel/helper-validator-identifier@8.0.4':
+    resolution: {integrity: sha1-YOQnqb56EBr1LxRYje8trYqfmIE=, tarball: http://registry.m.jd.com/@babel/helper-validator-identifier/download/@babel/helper-validator-identifier-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/helper-validator-option@8.0.0':
+    resolution: {integrity: sha1-UzB6aIIlT6jZQAF6cBqPfsYDoak=, tarball: http://registry.m.jd.com/@babel/helper-validator-option/download/@babel/helper-validator-option-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/helpers@8.0.0':
+    resolution: {integrity: sha1-LGEtS3/b1fHS+nMhAV42sC0aLXk=, tarball: http://registry.m.jd.com/@babel/helpers/download/@babel/helpers-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
   '@babel/parser@7.29.8':
     resolution: {integrity: sha1-llNxai8Qxne5j7xj1L+wAMMCzxc=, tarball: http://registry.m.jd.com/@babel/parser/download/@babel/parser-7.29.8.tgz}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
+  '@babel/parser@8.0.4':
+    resolution: {integrity: sha1-JE4hyiOrVMb1NzryEiyzphj53Tk=, tarball: http://registry.m.jd.com/@babel/parser/download/@babel/parser-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+    hasBin: true
+
+  '@babel/template@8.0.0':
+    resolution: {integrity: sha1-GMEmJrDW0joEQ3cWVYZO11ZqNFI=, tarball: http://registry.m.jd.com/@babel/template/download/@babel/template-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@babel/traverse@8.0.4':
+    resolution: {integrity: sha1-cfw/iGGkVI5/KTj97Kxz4l0dse0=, tarball: http://registry.m.jd.com/@babel/traverse/download/@babel/traverse-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
   '@babel/types@7.29.8':
     resolution: {integrity: sha1-Einu8x2FFW1w+j9M2Fk3bQ6vaGM=, tarball: http://registry.m.jd.com/@babel/types/download/@babel/types-7.29.8.tgz}
     engines: {node: '>=6.9.0'}
 
+  '@babel/types@8.0.4':
+    resolution: {integrity: sha1-jCCHATIMnwMjtbaiM9CT5SweO0E=, tarball: http://registry.m.jd.com/@babel/types/download/@babel/types-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
+
+  '@jridgewell/gen-mapping@0.3.13':
+    resolution: {integrity: sha1-Y0Khn0Q0dRjJPkOxrGnes8Rlah8=, tarball: http://registry.m.jd.com/@jridgewell/gen-mapping/download/@jridgewell/gen-mapping-0.3.13.tgz}
+
+  '@jridgewell/resolve-uri@3.1.2':
+    resolution: {integrity: sha1-eg7mAfYPmaIMfHxf8MgDiMEYm9Y=, tarball: http://registry.m.jd.com/@jridgewell/resolve-uri/download/@jridgewell/resolve-uri-3.1.2.tgz}
+    engines: {node: '>=6.0.0'}
+
   '@jridgewell/sourcemap-codec@1.6.0':
     resolution: {integrity: sha1-9MZj6GLwbcmMpNRThixGkCeJoY0=, tarball: http://registry.m.jd.com/@jridgewell/sourcemap-codec/download/@jridgewell/sourcemap-codec-1.6.0.tgz}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    resolution: {integrity: sha1-2xXWeByTHzolGj2sOVAcmKYIL9A=, tarball: http://registry.m.jd.com/@jridgewell/trace-mapping/download/@jridgewell/trace-mapping-0.3.31.tgz}
 
   '@json-render/core@0.20.0':
     resolution: {integrity: sha1-whh3R95st/fJglhJuJn/6pzoK8k=, tarball: http://registry.m.jd.com/@json-render/core/download/@json-render/core-0.20.0.tgz}
     peerDependencies:
       zod: ^4.0.0
+
+  '@json-render/jotai@0.20.0':
+    resolution: {integrity: sha512-xuAFJeZ5FT1oYj1j4Wg9Wm3nMUsJDIldVbE1ou7+A2Px7TKDdME2WOx+AnB0lBPn4haJkJ0RP4vhIKrIX6kJxQ==, tarball: https://registry.npmmirror.com/@json-render/jotai/-/jotai-0.20.0.tgz}
+    peerDependencies:
+      jotai: '>=2.0.0'
+
+  '@json-render/redux@0.20.0':
+    resolution: {integrity: sha512-mqN30EaYpxij8408TCsL5LFlcnxFo/zDc2WQniprZzS1MXV8BKIYqZIdjzLt/B6E4TnAWHqmWZB8vFAlVvmxpA==, tarball: https://registry.npmmirror.com/@json-render/redux/-/redux-0.20.0.tgz}
+    peerDependencies:
+      '@reduxjs/toolkit': '>=2.0.0'
+      redux: '>=5.0.0'
+    peerDependenciesMeta:
+      '@reduxjs/toolkit':
+        optional: true
+      redux:
+        optional: true
 
   '@json-render/vue@0.20.0':
     resolution: {integrity: sha1-dkrAeIsvUf43XN485oOLy/KNAeo=, tarball: http://registry.m.jd.com/@json-render/vue/download/@json-render/vue-0.20.0.tgz}
@@ -70,8 +177,27 @@ packages:
       vue: ^3.5.0
       zod: ^4.0.0
 
+  '@json-render/xstate@0.20.0':
+    resolution: {integrity: sha512-0ZXgfEHuNuUCcDh+bITl62v4OdtrK6LBwoB8mfF0klQE6LbV9WiAnHUQfDK92Sddmc09Tikq35aweco+VxPYMg==, tarball: https://registry.npmmirror.com/@json-render/xstate/-/xstate-0.20.0.tgz}
+    peerDependencies:
+      '@xstate/store': '>=3.0.0'
+
+  '@json-render/zustand@0.20.0':
+    resolution: {integrity: sha512-GoeG4RIox1DfV/q1EOItcuqGJmh2/NjdwOyEi6FAM7+YGH875Z8JVL5Zo1qjx2Kf6B/HDJsGalcfR6wtZMrdLQ==, tarball: https://registry.npmmirror.com/@json-render/zustand/-/zustand-0.20.0.tgz}
+    peerDependencies:
+      zustand: '>=5.0.0'
+
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha1-p5tV26+GBIEvUtFAssmrQbwVC7g=, tarball: http://registry.m.jd.com/@standard-schema/spec/download/@standard-schema/spec-1.1.0.tgz}
+
+  '@types/gensync@1.0.5':
+    resolution: {integrity: sha1-GBnrpTfQNtz07H6MjxX7/pOOmaA=, tarball: http://registry.m.jd.com/@types/gensync/download/@types/gensync-1.0.5.tgz}
+
+  '@types/jsesc@2.5.1':
+    resolution: {integrity: sha1-w03vxgjslLaNxqEqWBtECULG1QM=, tarball: http://registry.m.jd.com/@types/jsesc/download/@types/jsesc-2.5.1.tgz}
+
+  '@types/react@19.2.18':
+    resolution: {integrity: sha1-6wtqH7Y10alpLV+Eo0lb2K0VNwc=, tarball: http://registry.m.jd.com/@types/react/download/@types/react-19.2.18.tgz}
 
   '@vercel/oidc@3.2.0':
     resolution: {integrity: sha1-V4Kk1JBEQ/AVgIcFtVN8+cO2hSg=, tarball: http://registry.m.jd.com/@vercel/oidc/download/@vercel/oidc-3.2.0.tgz}
@@ -107,18 +233,48 @@ packages:
   '@workflow/serde@4.1.0':
     resolution: {integrity: sha1-gtu68jcPe4rkbZqaSrCRclj422I=, tarball: http://registry.m.jd.com/@workflow/serde/download/@workflow/serde-4.1.0.tgz}
 
+  '@xstate/store@4.2.3':
+    resolution: {integrity: sha1-shI2Lf457YfMUsa9qMfWwpOvBjI=, tarball: http://registry.m.jd.com/@xstate/store/download/@xstate/store-4.2.3.tgz}
+
   ai@7.0.91:
     resolution: {integrity: sha1-jVqdpboS1PAJ45gidQWaV8PTuqI=, tarball: http://registry.m.jd.com/ai/download/ai-7.0.91.tgz}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
+  baseline-browser-mapping@2.11.20:
+    resolution: {integrity: sha1-JgeMeksIKZZW6n3c6uvslV3EQwM=, tarball: http://registry.m.jd.com/baseline-browser-mapping/download/baseline-browser-mapping-2.11.20.tgz}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  browserslist@4.28.8:
+    resolution: {integrity: sha1-o8ec63AChSfl2n2vyIfzIAtRaMA=, tarball: http://registry.m.jd.com/browserslist/download/browserslist-4.28.8.tgz}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+
+  caniuse-lite@1.0.30001810:
+    resolution: {integrity: sha1-SXC0d96jJ4N03pvEOqj105/DzaI=, tarball: http://registry.m.jd.com/caniuse-lite/download/caniuse-lite-1.0.30001810.tgz}
+
+  convert-source-map@2.0.0:
+    resolution: {integrity: sha1-S1YPZJ/E6RjdCrdc9JYei8iC2Co=, tarball: http://registry.m.jd.com/convert-source-map/download/convert-source-map-2.0.0.tgz}
+
   csstype@3.2.3:
     resolution: {integrity: sha1-7EjA8+mT5QZIyG2lWeJhCZXPmJo=, tarball: http://registry.m.jd.com/csstype/download/csstype-3.2.3.tgz}
+
+  electron-to-chromium@1.5.420:
+    resolution: {integrity: sha1-/GbSanItbyJ+IJKs3zjdVbGYy0Q=, tarball: http://registry.m.jd.com/electron-to-chromium/download/electron-to-chromium-1.5.420.tgz}
+
+  empathic@2.0.1:
+    resolution: {integrity: sha1-N7G+3jEJPgSgPSq86V6jI/7o70k=, tarball: http://registry.m.jd.com/empathic/download/empathic-2.0.1.tgz}
+    engines: {node: '>=14'}
 
   entities@7.0.1:
     resolution: {integrity: sha1-JuioiInbY0F9y5oeeaPxvJK1l2s=, tarball: http://registry.m.jd.com/entities/download/entities-7.0.1.tgz}
     engines: {node: '>=0.12'}
+
+  escalade@3.2.0:
+    resolution: {integrity: sha1-ARo/aYVroYnf+n3I/M6Z0qh5A+U=, tarball: http://registry.m.jd.com/escalade/download/escalade-3.2.0.tgz}
+    engines: {node: '>=6'}
 
   estree-walker@2.0.2:
     resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=, tarball: http://registry.m.jd.com/estree-walker/download/estree-walker-2.0.2.tgz}
@@ -132,8 +288,44 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
+  gensync@1.0.0-beta.2:
+    resolution: {integrity: sha1-MqbudsPX9S1GsrGuXZP+qFgKJeA=, tarball: http://registry.m.jd.com/gensync/download/gensync-1.0.0-beta.2.tgz}
+    engines: {node: '>=6.9.0'}
+
+  immer@11.1.18:
+    resolution: {integrity: sha1-h9m87R4lFX3CO87WaBHeiUYOyPM=, tarball: http://registry.m.jd.com/immer/download/immer-11.1.18.tgz}
+
+  import-meta-resolve@4.2.0:
+    resolution: {integrity: sha1-CMuFtb037MjrHg9nDcJ2cALUNzQ=, tarball: http://registry.m.jd.com/import-meta-resolve/download/import-meta-resolve-4.2.0.tgz}
+
+  jotai@2.20.2:
+    resolution: {integrity: sha1-/M3ALuaLMUwqcjqLnDXeb8yl5kQ=, tarball: http://registry.m.jd.com/jotai/download/jotai-2.20.2.tgz}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@babel/core': '>=7.0.0'
+      '@babel/template': '>=7.0.0'
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+
+  js-tokens@10.0.0:
+    resolution: {integrity: sha1-3/51mbSou3/jCv+NAjUjTf+3mDE=, tarball: http://registry.m.jd.com/js-tokens/download/js-tokens-10.0.0.tgz}
+
+  jsesc@3.1.0:
+    resolution: {integrity: sha1-dNM1ojT2ftGZB/2t+sfM+dQJgl0=, tarball: http://registry.m.jd.com/jsesc/download/jsesc-3.1.0.tgz}
+    engines: {node: '>=6'}
+    hasBin: true
+
   json-schema@0.4.0:
     resolution: {integrity: sha1-995M9u+rg4666zI2R0y7paGTCrU=, tarball: http://registry.m.jd.com/json-schema/download/json-schema-0.4.0.tgz}
+
+  json5@2.2.3:
+    resolution: {integrity: sha1-eM1vGhm9wStz21rQxh79ZsHikoM=, tarball: http://registry.m.jd.com/json5/download/json5-2.2.3.tgz}
+    engines: {node: '>=6'}
+    hasBin: true
+
+  lru-cache@11.5.2:
+    resolution: {integrity: sha1-AOFmZckMYg+6FKPDaHMql2ST92A=, tarball: http://registry.m.jd.com/lru-cache/download/lru-cache-11.5.2.tgz}
+    engines: {node: 20 || >=22}
 
   magic-string@0.30.21:
     resolution: {integrity: sha1-VnY+wJoPqAkd8nh5/ZTRkHjADZE=, tarball: http://registry.m.jd.com/magic-string/download/magic-string-0.30.21.tgz}
@@ -142,6 +334,14 @@ packages:
     resolution: {integrity: sha1-9mot4Rmf/eD88hyKXxMQaxwIGRM=, tarball: http://registry.m.jd.com/nanoid/download/nanoid-3.3.18.tgz}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  node-releases@2.0.54:
+    resolution: {integrity: sha1-Ca8X1WR6qfIh7FzyvsuVtoqYGv4=, tarball: http://registry.m.jd.com/node-releases/download/node-releases-2.0.54.tgz}
+    engines: {node: '>=18'}
+
+  obug@2.1.4:
+    resolution: {integrity: sha1-kJDYpUilIlF5FdKqaq6QcZesbPg=, tarball: http://registry.m.jd.com/obug/download/obug-2.1.4.tgz}
+    engines: {node: '>=12.20.0'}
 
   picocolors@1.1.1:
     resolution: {integrity: sha1-PTIa8+q5ObCDyPkpodEs2oHCa2s=, tarball: http://registry.m.jd.com/picocolors/download/picocolors-1.1.1.tgz}
@@ -160,6 +360,23 @@ packages:
     resolution: {integrity: sha1-2kVjqZoG5i1sHNGsrjYyJLyu1uk=, tarball: http://registry.m.jd.com/postcss/download/postcss-8.5.28.tgz}
     engines: {node: ^10 || ^12 || >=14}
 
+  react-dom@19.2.8:
+    resolution: {integrity: sha1-O0a57tqHfN/yzxPSdw//SuNsLsI=, tarball: http://registry.m.jd.com/react-dom/download/react-dom-19.2.8.tgz}
+    peerDependencies:
+      react: ^19.2.8
+
+  react@19.2.8:
+    resolution: {integrity: sha1-qAZj27WNacb+P9KR08syTop9/y0=, tarball: http://registry.m.jd.com/react/download/react-19.2.8.tgz}
+    engines: {node: '>=0.10.0'}
+
+  scheduler@0.27.0:
+    resolution: {integrity: sha1-DE74LWfR5cHjWej8dtOofwRf5b0=, tarball: http://registry.m.jd.com/scheduler/download/scheduler-0.27.0.tgz}
+
+  semver@7.8.5:
+    resolution: {integrity: sha1-ObZGA33VDBT7RR5+TKxY7YuGP2k=, tarball: http://registry.m.jd.com/semver/download/semver-7.8.5.tgz}
+    engines: {node: '>=10'}
+    hasBin: true
+
   source-map-js@1.2.1:
     resolution: {integrity: sha1-HOVlD93YerwJnto33P8CTCZnrkY=, tarball: http://registry.m.jd.com/source-map-js/download/source-map-js-1.2.1.tgz}
     engines: {node: '>=0.10.0'}
@@ -167,6 +384,17 @@ packages:
   undici@7.29.0:
     resolution: {integrity: sha1-rg9vYuBuBXqcu3srX94rt095G48=, tarball: http://registry.m.jd.com/undici/download/undici-7.29.0.tgz}
     engines: {node: '>=20.18.1'}
+
+  update-browserslist-db@1.3.2:
+    resolution: {integrity: sha1-nZn7/1bFC7Ebpf01zs5ZFtpZWDY=, tarball: http://registry.m.jd.com/update-browserslist-db/download/update-browserslist-db-1.3.2.tgz}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+
+  use-sync-external-store@1.6.0:
+    resolution: {integrity: sha1-sXS/plyytSZzLZ8qwKQIAnh28y0=, tarball: http://registry.m.jd.com/use-sync-external-store/download/use-sync-external-store-1.6.0.tgz}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   vue@3.5.42:
     resolution: {integrity: sha1-YJnnUKGcaKXAn3hYCNWrsBVYo8E=, tarball: http://registry.m.jd.com/vue/download/vue-3.5.42.tgz}
@@ -178,6 +406,15 @@ packages:
 
   zod@4.5.4:
     resolution: {integrity: sha1-4hXGJCDFKN15UeMftSxUOPH9GEo=, tarball: http://registry.m.jd.com/zod/download/zod-4.5.4.tgz}
+
+  zustand@5.0.15:
+    resolution: {integrity: sha1-Qr3fNWR8uAqBiolDpp9mGMEm/P4=, tarball: http://registry.m.jd.com/zustand/download/zustand-5.0.15.tgz}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
 
 snapshots:
 
@@ -201,24 +438,130 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
+  '@babel/code-frame@8.0.0':
+    dependencies:
+      '@babel/helper-validator-identifier': 8.0.4
+      js-tokens: 10.0.0
+
+  '@babel/compat-data@8.0.0': {}
+
+  '@babel/core@8.0.1':
+    dependencies:
+      '@babel/code-frame': 8.0.0
+      '@babel/generator': 8.0.0
+      '@babel/helper-compilation-targets': 8.0.0
+      '@babel/helpers': 8.0.0
+      '@babel/parser': 8.0.4
+      '@babel/template': 8.0.0
+      '@babel/traverse': 8.0.4
+      '@babel/types': 8.0.4
+      '@types/gensync': 1.0.5
+      convert-source-map: 2.0.0
+      empathic: 2.0.1
+      gensync: 1.0.0-beta.2
+      import-meta-resolve: 4.2.0
+      json5: 2.2.3
+      obug: 2.1.4
+      semver: 7.8.5
+
+  '@babel/generator@8.0.0':
+    dependencies:
+      '@babel/parser': 8.0.4
+      '@babel/types': 8.0.4
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.31
+      '@types/jsesc': 2.5.1
+      jsesc: 3.1.0
+
+  '@babel/helper-compilation-targets@8.0.0':
+    dependencies:
+      '@babel/compat-data': 8.0.0
+      '@babel/helper-validator-option': 8.0.0
+      browserslist: 4.28.8
+      lru-cache: 11.5.2
+      semver: 7.8.5
+
+  '@babel/helper-globals@8.0.0': {}
+
   '@babel/helper-string-parser@7.29.7': {}
 
+  '@babel/helper-string-parser@8.0.0': {}
+
   '@babel/helper-validator-identifier@7.29.7': {}
+
+  '@babel/helper-validator-identifier@8.0.4': {}
+
+  '@babel/helper-validator-option@8.0.0': {}
+
+  '@babel/helpers@8.0.0':
+    dependencies:
+      '@babel/template': 8.0.0
+      '@babel/types': 8.0.4
 
   '@babel/parser@7.29.8':
     dependencies:
       '@babel/types': 7.29.8
+
+  '@babel/parser@8.0.4':
+    dependencies:
+      '@babel/types': 8.0.4
+
+  '@babel/template@8.0.0':
+    dependencies:
+      '@babel/code-frame': 8.0.0
+      '@babel/parser': 8.0.4
+      '@babel/types': 8.0.4
+
+  '@babel/traverse@8.0.4':
+    dependencies:
+      '@babel/code-frame': 8.0.0
+      '@babel/generator': 8.0.0
+      '@babel/helper-globals': 8.0.0
+      '@babel/parser': 8.0.4
+      '@babel/template': 8.0.0
+      '@babel/types': 8.0.4
+      obug: 2.1.4
 
   '@babel/types@7.29.8':
     dependencies:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
+  '@babel/types@8.0.4':
+    dependencies:
+      '@babel/helper-string-parser': 8.0.0
+      '@babel/helper-validator-identifier': 8.0.4
+
+  '@jridgewell/gen-mapping@0.3.13':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.6.0
+      '@jridgewell/trace-mapping': 0.3.31
+
+  '@jridgewell/resolve-uri@3.1.2': {}
+
   '@jridgewell/sourcemap-codec@1.6.0': {}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.6.0
 
   '@json-render/core@0.20.0(zod@4.5.4)':
     dependencies:
       zod: 4.5.4
+
+  '@json-render/jotai@0.20.0(jotai@2.20.2(@babel/core@8.0.1)(@babel/template@8.0.0)(@types/react@19.2.18)(react@19.2.8))(zod@4.5.4)':
+    dependencies:
+      '@json-render/core': 0.20.0(zod@4.5.4)
+      jotai: 2.20.2(@babel/core@8.0.1)(@babel/template@8.0.0)(@types/react@19.2.18)(react@19.2.8)
+    transitivePeerDependencies:
+      - zod
+
+  '@json-render/redux@0.20.0(zod@4.5.4)':
+    dependencies:
+      '@json-render/core': 0.20.0(zod@4.5.4)
+    transitivePeerDependencies:
+      - zod
 
   '@json-render/vue@0.20.0(vue@3.5.42)(zod@4.5.4)':
     dependencies:
@@ -226,7 +569,29 @@ snapshots:
       vue: 3.5.42
       zod: 4.5.4
 
+  '@json-render/xstate@0.20.0(@xstate/store@4.2.3)(zod@4.5.4)':
+    dependencies:
+      '@json-render/core': 0.20.0(zod@4.5.4)
+      '@xstate/store': 4.2.3
+    transitivePeerDependencies:
+      - zod
+
+  '@json-render/zustand@0.20.0(zod@4.5.4)(zustand@5.0.15(@types/react@19.2.18)(immer@11.1.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8)))':
+    dependencies:
+      '@json-render/core': 0.20.0(zod@4.5.4)
+      zustand: 5.0.15(@types/react@19.2.18)(immer@11.1.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+    transitivePeerDependencies:
+      - zod
+
   '@standard-schema/spec@1.1.0': {}
+
+  '@types/gensync@1.0.5': {}
+
+  '@types/jsesc@2.5.1': {}
+
+  '@types/react@19.2.18':
+    dependencies:
+      csstype: 3.2.3
 
   '@vercel/oidc@3.2.0': {}
 
@@ -286,6 +651,8 @@ snapshots:
 
   '@workflow/serde@4.1.0': {}
 
+  '@xstate/store@4.2.3': {}
+
   ai@7.0.91(zod@4.5.4):
     dependencies:
       '@ai-sdk/gateway': 4.0.73(zod@4.5.4)
@@ -293,9 +660,29 @@ snapshots:
       '@ai-sdk/provider-utils': 5.0.36(zod@4.5.4)
       zod: 4.5.4
 
+  baseline-browser-mapping@2.11.20: {}
+
+  browserslist@4.28.8:
+    dependencies:
+      baseline-browser-mapping: 2.11.20
+      caniuse-lite: 1.0.30001810
+      electron-to-chromium: 1.5.420
+      node-releases: 2.0.54
+      update-browserslist-db: 1.3.2(browserslist@4.28.8)
+
+  caniuse-lite@1.0.30001810: {}
+
+  convert-source-map@2.0.0: {}
+
   csstype@3.2.3: {}
 
+  electron-to-chromium@1.5.420: {}
+
+  empathic@2.0.1: {}
+
   entities@7.0.1: {}
+
+  escalade@3.2.0: {}
 
   estree-walker@2.0.2: {}
 
@@ -304,13 +691,38 @@ snapshots:
   fsevents@2.3.2:
     optional: true
 
+  gensync@1.0.0-beta.2: {}
+
+  immer@11.1.18: {}
+
+  import-meta-resolve@4.2.0: {}
+
+  jotai@2.20.2(@babel/core@8.0.1)(@babel/template@8.0.0)(@types/react@19.2.18)(react@19.2.8):
+    dependencies:
+      '@babel/core': 8.0.1
+      '@babel/template': 8.0.0
+      '@types/react': 19.2.18
+      react: 19.2.8
+
+  js-tokens@10.0.0: {}
+
+  jsesc@3.1.0: {}
+
   json-schema@0.4.0: {}
+
+  json5@2.2.3: {}
+
+  lru-cache@11.5.2: {}
 
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
 
   nanoid@3.3.18: {}
+
+  node-releases@2.0.54: {}
+
+  obug@2.1.4: {}
 
   picocolors@1.1.1: {}
 
@@ -328,9 +740,30 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  react-dom@19.2.8(react@19.2.8):
+    dependencies:
+      react: 19.2.8
+      scheduler: 0.27.0
+
+  react@19.2.8: {}
+
+  scheduler@0.27.0: {}
+
+  semver@7.8.5: {}
+
   source-map-js@1.2.1: {}
 
   undici@7.29.0: {}
+
+  update-browserslist-db@1.3.2(browserslist@4.28.8):
+    dependencies:
+      browserslist: 4.28.8
+      escalade: 3.2.0
+      picocolors: 1.1.1
+
+  use-sync-external-store@1.6.0(react@19.2.8):
+    dependencies:
+      react: 19.2.8
 
   vue@3.5.42:
     dependencies:
@@ -341,3 +774,10 @@ snapshots:
       '@vue/shared': 3.5.42
 
   zod@4.5.4: {}
+
+  zustand@5.0.15(@types/react@19.2.18)(immer@11.1.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8)):
+    dependencies:
+      '@types/react': 19.2.18
+      immer: 11.1.18
+      react: 19.2.8
+      use-sync-external-store: 1.6.0(react@19.2.8)
