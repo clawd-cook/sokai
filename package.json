@@ -11,6 +11,9 @@
   "license": "MIT",
   "packageManager": "pnpm@11.23.0",
   "dependencies": {
+    "@json-render/core": "0.20.0",
+    "@json-render/vue": "0.20.0",
+    "ai": "7.0.91",
     "playwright": "1.62.1"
   }
 }

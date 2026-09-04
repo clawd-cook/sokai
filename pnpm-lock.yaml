@@ -8,16 +8,143 @@ importers:
 
   .:
     dependencies:
+      '@json-render/core':
+        specifier: 0.20.0
+        version: 0.20.0(zod@4.5.4)
+      '@json-render/vue':
+        specifier: 0.20.0
+        version: 0.20.0(vue@3.5.42)(zod@4.5.4)
+      ai:
+        specifier: 7.0.91
+        version: 7.0.91(zod@4.5.4)
       playwright:
         specifier: 1.62.1
         version: 1.62.1
 
 packages:
 
+  '@ai-sdk/gateway@4.0.73':
+    resolution: {integrity: sha1-MROax11UuBmWKk4SPzG4djKmNmI=, tarball: http://registry.m.jd.com/@ai-sdk/gateway/download/@ai-sdk/gateway-4.0.73.tgz}
+    engines: {node: '>=22'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  '@ai-sdk/provider-utils@5.0.36':
+    resolution: {integrity: sha1-V+XFDvw3mPzk6BzSDH7JOyRKRmo=, tarball: http://registry.m.jd.com/@ai-sdk/provider-utils/download/@ai-sdk/provider-utils-5.0.36.tgz}
+    engines: {node: '>=22'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  '@ai-sdk/provider@4.0.10':
+    resolution: {integrity: sha1-HFHU4Jkd6ldzyKdPnaFsUlJ774w=, tarball: http://registry.m.jd.com/@ai-sdk/provider/download/@ai-sdk/provider-4.0.10.tgz}
+    engines: {node: '>=22'}
+
+  '@babel/helper-string-parser@7.29.7':
+    resolution: {integrity: sha1-fwhx2Zgk0jE31g+G/PYTD9WhtR8=, tarball: http://registry.m.jd.com/@babel/helper-string-parser/download/@babel/helper-string-parser-7.29.7.tgz}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/helper-validator-identifier@7.29.7':
+    resolution: {integrity: sha1-vYcITO0MeW7Ea9pJLeboPSnon8I=, tarball: http://registry.m.jd.com/@babel/helper-validator-identifier/download/@babel/helper-validator-identifier-7.29.7.tgz}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/parser@7.29.8':
+    resolution: {integrity: sha1-llNxai8Qxne5j7xj1L+wAMMCzxc=, tarball: http://registry.m.jd.com/@babel/parser/download/@babel/parser-7.29.8.tgz}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  '@babel/types@7.29.8':
+    resolution: {integrity: sha1-Einu8x2FFW1w+j9M2Fk3bQ6vaGM=, tarball: http://registry.m.jd.com/@babel/types/download/@babel/types-7.29.8.tgz}
+    engines: {node: '>=6.9.0'}
+
+  '@jridgewell/sourcemap-codec@1.6.0':
+    resolution: {integrity: sha1-9MZj6GLwbcmMpNRThixGkCeJoY0=, tarball: http://registry.m.jd.com/@jridgewell/sourcemap-codec/download/@jridgewell/sourcemap-codec-1.6.0.tgz}
+
+  '@json-render/core@0.20.0':
+    resolution: {integrity: sha1-whh3R95st/fJglhJuJn/6pzoK8k=, tarball: http://registry.m.jd.com/@json-render/core/download/@json-render/core-0.20.0.tgz}
+    peerDependencies:
+      zod: ^4.0.0
+
+  '@json-render/vue@0.20.0':
+    resolution: {integrity: sha1-dkrAeIsvUf43XN485oOLy/KNAeo=, tarball: http://registry.m.jd.com/@json-render/vue/download/@json-render/vue-0.20.0.tgz}
+    peerDependencies:
+      vue: ^3.5.0
+      zod: ^4.0.0
+
+  '@standard-schema/spec@1.1.0':
+    resolution: {integrity: sha1-p5tV26+GBIEvUtFAssmrQbwVC7g=, tarball: http://registry.m.jd.com/@standard-schema/spec/download/@standard-schema/spec-1.1.0.tgz}
+
+  '@vercel/oidc@3.2.0':
+    resolution: {integrity: sha1-V4Kk1JBEQ/AVgIcFtVN8+cO2hSg=, tarball: http://registry.m.jd.com/@vercel/oidc/download/@vercel/oidc-3.2.0.tgz}
+    engines: {node: '>= 20'}
+
+  '@vue/compiler-core@3.5.42':
+    resolution: {integrity: sha1-nRWcpbHn15KkLpsd3y/DHtyTM9w=, tarball: http://registry.m.jd.com/@vue/compiler-core/download/@vue/compiler-core-3.5.42.tgz}
+
+  '@vue/compiler-dom@3.5.42':
+    resolution: {integrity: sha1-KslXABC7/7fAjYqQSpVuy6vN9sY=, tarball: http://registry.m.jd.com/@vue/compiler-dom/download/@vue/compiler-dom-3.5.42.tgz}
+
+  '@vue/compiler-sfc@3.5.42':
+    resolution: {integrity: sha1-UCxQ54ZKmAt/FHt4l047Sf78wW0=, tarball: http://registry.m.jd.com/@vue/compiler-sfc/download/@vue/compiler-sfc-3.5.42.tgz}
+
+  '@vue/compiler-ssr@3.5.42':
+    resolution: {integrity: sha1-oxIa1RfpBiEhdi5FLxJWdMxhYvo=, tarball: http://registry.m.jd.com/@vue/compiler-ssr/download/@vue/compiler-ssr-3.5.42.tgz}
+
+  '@vue/reactivity@3.5.42':
+    resolution: {integrity: sha1-gAIg8CPTb9BNlEYMfHq1gI+K518=, tarball: http://registry.m.jd.com/@vue/reactivity/download/@vue/reactivity-3.5.42.tgz}
+
+  '@vue/runtime-core@3.5.42':
+    resolution: {integrity: sha1-qK+FdG1vmp8fjkYmviTrC4yaHnI=, tarball: http://registry.m.jd.com/@vue/runtime-core/download/@vue/runtime-core-3.5.42.tgz}
+
+  '@vue/runtime-dom@3.5.42':
+    resolution: {integrity: sha1-x7SHqSssOB21R8GqUEC9f+u0BEg=, tarball: http://registry.m.jd.com/@vue/runtime-dom/download/@vue/runtime-dom-3.5.42.tgz}
+
+  '@vue/server-renderer@3.5.42':
+    resolution: {integrity: sha1-J8PUdDJzv36Dn8Wl4vfbJejXeeg=, tarball: http://registry.m.jd.com/@vue/server-renderer/download/@vue/server-renderer-3.5.42.tgz}
+
+  '@vue/shared@3.5.42':
+    resolution: {integrity: sha1-pBPPISYlAmYjVM2jtlqzG8qXkgI=, tarball: http://registry.m.jd.com/@vue/shared/download/@vue/shared-3.5.42.tgz}
+
+  '@workflow/serde@4.1.0':
+    resolution: {integrity: sha1-gtu68jcPe4rkbZqaSrCRclj422I=, tarball: http://registry.m.jd.com/@workflow/serde/download/@workflow/serde-4.1.0.tgz}
+
+  ai@7.0.91:
+    resolution: {integrity: sha1-jVqdpboS1PAJ45gidQWaV8PTuqI=, tarball: http://registry.m.jd.com/ai/download/ai-7.0.91.tgz}
+    engines: {node: '>=22'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  csstype@3.2.3:
+    resolution: {integrity: sha1-7EjA8+mT5QZIyG2lWeJhCZXPmJo=, tarball: http://registry.m.jd.com/csstype/download/csstype-3.2.3.tgz}
+
+  entities@7.0.1:
+    resolution: {integrity: sha1-JuioiInbY0F9y5oeeaPxvJK1l2s=, tarball: http://registry.m.jd.com/entities/download/entities-7.0.1.tgz}
+    engines: {node: '>=0.12'}
+
+  estree-walker@2.0.2:
+    resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=, tarball: http://registry.m.jd.com/estree-walker/download/estree-walker-2.0.2.tgz}
+
+  eventsource-parser@3.1.1:
+    resolution: {integrity: sha1-uWy7fazk83dPWKnjsa6aSlJIcuI=, tarball: http://registry.m.jd.com/eventsource-parser/download/eventsource-parser-3.1.1.tgz}
+    engines: {node: '>=18.0.0'}
+
   fsevents@2.3.2:
     resolution: {integrity: sha1-ilJveLj99GI7cJ4Ll1xSwkwC/Ro=, tarball: http://registry.m.jd.com/fsevents/download/fsevents-2.3.2.tgz}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
+
+  json-schema@0.4.0:
+    resolution: {integrity: sha1-995M9u+rg4666zI2R0y7paGTCrU=, tarball: http://registry.m.jd.com/json-schema/download/json-schema-0.4.0.tgz}
+
+  magic-string@0.30.21:
+    resolution: {integrity: sha1-VnY+wJoPqAkd8nh5/ZTRkHjADZE=, tarball: http://registry.m.jd.com/magic-string/download/magic-string-0.30.21.tgz}
+
+  nanoid@3.3.18:
+    resolution: {integrity: sha1-9mot4Rmf/eD88hyKXxMQaxwIGRM=, tarball: http://registry.m.jd.com/nanoid/download/nanoid-3.3.18.tgz}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  picocolors@1.1.1:
+    resolution: {integrity: sha1-PTIa8+q5ObCDyPkpodEs2oHCa2s=, tarball: http://registry.m.jd.com/picocolors/download/picocolors-1.1.1.tgz}
 
   playwright-core@1.62.1:
     resolution: {integrity: sha1-Eg9noZGBv9GDxg+pA8DZkzC1Z4U=, tarball: http://registry.m.jd.com/playwright-core/download/playwright-core-1.62.1.tgz}
@@ -29,10 +156,163 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
+  postcss@8.5.28:
+    resolution: {integrity: sha1-2kVjqZoG5i1sHNGsrjYyJLyu1uk=, tarball: http://registry.m.jd.com/postcss/download/postcss-8.5.28.tgz}
+    engines: {node: ^10 || ^12 || >=14}
+
+  source-map-js@1.2.1:
+    resolution: {integrity: sha1-HOVlD93YerwJnto33P8CTCZnrkY=, tarball: http://registry.m.jd.com/source-map-js/download/source-map-js-1.2.1.tgz}
+    engines: {node: '>=0.10.0'}
+
+  undici@7.29.0:
+    resolution: {integrity: sha1-rg9vYuBuBXqcu3srX94rt095G48=, tarball: http://registry.m.jd.com/undici/download/undici-7.29.0.tgz}
+    engines: {node: '>=20.18.1'}
+
+  vue@3.5.42:
+    resolution: {integrity: sha1-YJnnUKGcaKXAn3hYCNWrsBVYo8E=, tarball: http://registry.m.jd.com/vue/download/vue-3.5.42.tgz}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  zod@4.5.4:
+    resolution: {integrity: sha1-4hXGJCDFKN15UeMftSxUOPH9GEo=, tarball: http://registry.m.jd.com/zod/download/zod-4.5.4.tgz}
+
 snapshots:
+
+  '@ai-sdk/gateway@4.0.73(zod@4.5.4)':
+    dependencies:
+      '@ai-sdk/provider': 4.0.10
+      '@ai-sdk/provider-utils': 5.0.36(zod@4.5.4)
+      '@vercel/oidc': 3.2.0
+      zod: 4.5.4
+
+  '@ai-sdk/provider-utils@5.0.36(zod@4.5.4)':
+    dependencies:
+      '@ai-sdk/provider': 4.0.10
+      '@standard-schema/spec': 1.1.0
+      '@workflow/serde': 4.1.0
+      eventsource-parser: 3.1.1
+      undici: 7.29.0
+      zod: 4.5.4
+
+  '@ai-sdk/provider@4.0.10':
+    dependencies:
+      json-schema: 0.4.0
+
+  '@babel/helper-string-parser@7.29.7': {}
+
+  '@babel/helper-validator-identifier@7.29.7': {}
+
+  '@babel/parser@7.29.8':
+    dependencies:
+      '@babel/types': 7.29.8
+
+  '@babel/types@7.29.8':
+    dependencies:
+      '@babel/helper-string-parser': 7.29.7
+      '@babel/helper-validator-identifier': 7.29.7
+
+  '@jridgewell/sourcemap-codec@1.6.0': {}
+
+  '@json-render/core@0.20.0(zod@4.5.4)':
+    dependencies:
+      zod: 4.5.4
+
+  '@json-render/vue@0.20.0(vue@3.5.42)(zod@4.5.4)':
+    dependencies:
+      '@json-render/core': 0.20.0(zod@4.5.4)
+      vue: 3.5.42
+      zod: 4.5.4
+
+  '@standard-schema/spec@1.1.0': {}
+
+  '@vercel/oidc@3.2.0': {}
+
+  '@vue/compiler-core@3.5.42':
+    dependencies:
+      '@babel/parser': 7.29.8
+      '@vue/shared': 3.5.42
+      entities: 7.0.1
+      estree-walker: 2.0.2
+      source-map-js: 1.2.1
+
+  '@vue/compiler-dom@3.5.42':
+    dependencies:
+      '@vue/compiler-core': 3.5.42
+      '@vue/shared': 3.5.42
+
+  '@vue/compiler-sfc@3.5.42':
+    dependencies:
+      '@babel/parser': 7.29.8
+      '@vue/compiler-core': 3.5.42
+      '@vue/compiler-dom': 3.5.42
+      '@vue/compiler-ssr': 3.5.42
+      '@vue/shared': 3.5.42
+      estree-walker: 2.0.2
+      magic-string: 0.30.21
+      postcss: 8.5.28
+      source-map-js: 1.2.1
+
+  '@vue/compiler-ssr@3.5.42':
+    dependencies:
+      '@vue/compiler-dom': 3.5.42
+      '@vue/shared': 3.5.42
+
+  '@vue/reactivity@3.5.42':
+    dependencies:
+      '@vue/shared': 3.5.42
+
+  '@vue/runtime-core@3.5.42':
+    dependencies:
+      '@vue/reactivity': 3.5.42
+      '@vue/shared': 3.5.42
+
+  '@vue/runtime-dom@3.5.42':
+    dependencies:
+      '@vue/reactivity': 3.5.42
+      '@vue/runtime-core': 3.5.42
+      '@vue/shared': 3.5.42
+      csstype: 3.2.3
+
+  '@vue/server-renderer@3.5.42':
+    dependencies:
+      '@vue/compiler-ssr': 3.5.42
+      '@vue/runtime-dom': 3.5.42
+      '@vue/shared': 3.5.42
+
+  '@vue/shared@3.5.42': {}
+
+  '@workflow/serde@4.1.0': {}
+
+  ai@7.0.91(zod@4.5.4):
+    dependencies:
+      '@ai-sdk/gateway': 4.0.73(zod@4.5.4)
+      '@ai-sdk/provider': 4.0.10
+      '@ai-sdk/provider-utils': 5.0.36(zod@4.5.4)
+      zod: 4.5.4
+
+  csstype@3.2.3: {}
+
+  entities@7.0.1: {}
+
+  estree-walker@2.0.2: {}
+
+  eventsource-parser@3.1.1: {}
 
   fsevents@2.3.2:
     optional: true
+
+  json-schema@0.4.0: {}
+
+  magic-string@0.30.21:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.6.0
+
+  nanoid@3.3.18: {}
+
+  picocolors@1.1.1: {}
 
   playwright-core@1.62.1: {}
 
@@ -41,3 +321,23 @@ snapshots:
       playwright-core: 1.62.1
     optionalDependencies:
       fsevents: 2.3.2
+
+  postcss@8.5.28:
+    dependencies:
+      nanoid: 3.3.18
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  source-map-js@1.2.1: {}
+
+  undici@7.29.0: {}
+
+  vue@3.5.42:
+    dependencies:
+      '@vue/compiler-dom': 3.5.42
+      '@vue/compiler-sfc': 3.5.42
+      '@vue/runtime-dom': 3.5.42
+      '@vue/server-renderer': 3.5.42
+      '@vue/shared': 3.5.42
+
+  zod@4.5.4: {}
