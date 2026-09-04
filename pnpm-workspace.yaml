@@ -3,6 +3,7 @@ packages:
 
 allowBuilds:
   esbuild: true
+  msw: true
 
 registry:
   default: http://registry.m.jd.com/
