@@ -39,6 +39,34 @@ export function takePendingMockMiss(
   return createMockMissError(pending);
 }
 
+/**
+ * Step-scoped miss memory: load-time pageerror/console must not fail step 1.
+ * `beginStep()` drops anything recorded earlier; `take()` only returns misses
+ * remembered after the current step started.
+ */
+export class MockMissSink {
+  private seq = 0;
+  private stepStartedAt = 0;
+  private pending: { payload: MockMissPayload; at: number } | undefined;
+
+  beginStep(): void {
+    this.stepStartedAt = ++this.seq;
+    this.pending = undefined;
+  }
+
+  remember(payload: MockMissPayload | undefined): void {
+    if (!payload) return;
+    this.pending = { payload, at: ++this.seq };
+  }
+
+  take(): (Error & { fingerprint: string }) | undefined {
+    const held = this.pending;
+    this.pending = undefined;
+    if (!held || held.at < this.stepStartedAt) return undefined;
+    return createMockMissError(held.payload);
+  }
+}
+
 type BridgeGlobal = typeof globalThis & {
   fetch: typeof fetch;
   __sokaiMockFetchInFlight?: number;
@@ -53,6 +81,7 @@ type BridgeGlobal = typeof globalThis & {
 /**
  * Wrap page fetch after Vue mount so page-side MockMissError is reported
  * to the Playwright exposeBinding and counted for settle-after-action.
+ * The binding is awaited so Node records `lastMiss` before in-flight hits 0.
  */
 export function wrapPreviewFetchForMockMiss(): void {
   const w = globalThis as BridgeGlobal;
@@ -67,7 +96,7 @@ export function wrapPreviewFetchForMockMiss(): void {
     } catch (err) {
       const e = err as { name?: string; message?: string; fingerprint?: string };
       if (e?.name === "MockMissError" || typeof e?.fingerprint === "string") {
-        void w.__sokaiReportMockMiss?.({
+        await w.__sokaiReportMockMiss?.({
           name: "MockMissError",
           message: e.message ?? "Mock miss",
           fingerprint: e.fingerprint ?? "",

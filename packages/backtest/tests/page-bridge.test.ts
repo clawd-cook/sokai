@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   PREVIEW_READY_SELECTOR,
+  MockMissSink,
   createMockMissError,
   mockMissFromMessage,
   mockMissFromPageError,
@@ -78,5 +79,56 @@ describe("page-bridge", () => {
       delete host.__sokaiMockFetchInFlight;
       delete host.__sokaiReportMockMiss;
     }
+  });
+
+  it("awaits the mock-miss binding before fetch rejects", async () => {
+    const host = globalThis as typeof globalThis & {
+      fetch: typeof fetch;
+      __sokaiFetchWrapped?: boolean;
+      __sokaiMockFetchInFlight?: number;
+      __sokaiReportMockMiss?: (payload: { fingerprint: string }) => Promise<void>;
+    };
+    const prevFetch = host.fetch;
+    let recordedAt = 0;
+    let rejectedAt = 0;
+    host.fetch = async () => {
+      const err = new Error("Mock miss: GET /await") as Error & { fingerprint: string };
+      err.name = "MockMissError";
+      err.fingerprint = "GET /await";
+      throw err;
+    };
+    host.__sokaiReportMockMiss = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+      recordedAt = Date.now();
+    };
+    try {
+      wrapPreviewFetchForMockMiss();
+      await expect(host.fetch("https://example.com/await")).rejects.toMatchObject({
+        name: "MockMissError",
+      });
+      rejectedAt = Date.now();
+      expect(recordedAt).toBeGreaterThan(0);
+      expect(rejectedAt).toBeGreaterThanOrEqual(recordedAt);
+    } finally {
+      host.fetch = prevFetch;
+      delete host.__sokaiFetchWrapped;
+      delete host.__sokaiMockFetchInFlight;
+      delete host.__sokaiReportMockMiss;
+    }
+  });
+
+  it("ignores misses recorded before the current step starts", () => {
+    const sink = new MockMissSink();
+    sink.remember({ message: "Mock miss: GET /boot", fingerprint: "GET /boot" });
+    sink.beginStep();
+    expect(sink.take()).toBeUndefined();
+  });
+
+  it("keeps misses recorded after the current step starts", () => {
+    const sink = new MockMissSink();
+    sink.remember({ message: "Mock miss: GET /boot", fingerprint: "GET /boot" });
+    sink.beginStep();
+    sink.remember({ message: "Mock miss: POST /page", fingerprint: "POST /page" });
+    expect(sink.take()?.fingerprint).toBe("POST /page");
   });
 });

@@ -3,10 +3,10 @@ import { chromium, type Browser, type Page } from "playwright";
 import { startPreviewServer, type PreviewServerHandle } from "@sokai/runtime";
 import {
   MOCK_MISS_BINDING,
+  MockMissSink,
   PREVIEW_READY_SELECTOR,
   mockMissFromMessage,
   mockMissFromPageError,
-  takePendingMockMiss,
   wrapPreviewFetchForMockMiss,
   type MockMissPayload,
 } from "./page-bridge.js";
@@ -37,11 +37,7 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
   let server: PreviewServerHandle | undefined;
   let browser: Browser | undefined;
   let page: Page | undefined;
-  let lastMiss: MockMissPayload | undefined;
-
-  function rememberMiss(payload: MockMissPayload | undefined) {
-    if (payload) lastMiss = payload;
-  }
+  const sink = new MockMissSink();
 
   async function settleAndThrowMockMiss() {
     if (!page) return;
@@ -61,9 +57,12 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
         { timeout: 5000 },
       )
       .catch(() => undefined);
-    const err = takePendingMockMiss(lastMiss);
-    lastMiss = undefined;
+    const err = sink.take();
     if (err) throw err;
+  }
+
+  function beginUserAction() {
+    sink.beginStep();
   }
 
   return {
@@ -80,11 +79,11 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
       await page.exposeBinding(
         MOCK_MISS_BINDING,
         (_source, payload: MockMissPayload) => {
-          rememberMiss(payload);
+          sink.remember(payload);
         },
       );
       page.on("pageerror", (err) => {
-        rememberMiss(
+        sink.remember(
           mockMissFromPageError({
             name: err.name,
             message: err.message,
@@ -93,17 +92,20 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
       });
       page.on("console", (msg) => {
         if (msg.type() === "error") {
-          rememberMiss(mockMissFromMessage(msg.text()));
+          sink.remember(mockMissFromMessage(msg.text()));
         }
       });
 
       await page.goto(server.baseUrl, { waitUntil: "domcontentloaded" });
       await page.waitForSelector(PREVIEW_READY_SELECTOR, { timeout: 10_000 });
       await page.evaluate(wrapPreviewFetchForMockMiss);
+      // Drop load-time pageerror/console misses so they cannot poison step 1.
+      sink.beginStep();
     },
 
     async clickAction(actionId: string) {
       if (!page) throw new Error("Playwright driver not started");
+      beginUserAction();
       const selector = `[data-sokai-action="${actionId}"]`;
       await page.locator(selector).click({ timeout: 5000 });
       await settleAndThrowMockMiss();
@@ -111,12 +113,14 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
 
     async click(hint: LocatorHint) {
       if (!page) throw new Error("Playwright driver not started");
+      beginUserAction();
       await locatorFor(page, hint).click({ timeout: 5000 });
       await settleAndThrowMockMiss();
     },
 
     async fill(hint: LocatorHint, value: string) {
       if (!page) throw new Error("Playwright driver not started");
+      beginUserAction();
       const loc = locatorFor(page, hint);
       const tag = await loc
         .evaluate((el) => el.tagName.toLowerCase())
@@ -131,6 +135,7 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
 
     async assertRegion(regionId: string) {
       if (!page) throw new Error("Playwright driver not started");
+      beginUserAction();
       const selector = `[data-sokai-region="${regionId}"]`;
       const count = await page.locator(selector).count();
       if (count === 0) {
@@ -145,7 +150,7 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
       page = undefined;
       browser = undefined;
       server = undefined;
-      lastMiss = undefined;
+      sink.beginStep();
     },
   };
 }
