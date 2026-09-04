@@ -5,24 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { runBacktest, type BacktestDriver } from "@sokai/backtest";
 import { parsePageSchema } from "@sokai/session";
-import { runCli } from "../src/main.js";
-
-async function findRepoRoot(start: string): Promise<string> {
-  const { access } = await import("node:fs/promises");
-  let dir = start;
-  for (;;) {
-    try {
-      await access(join(dir, "fixtures/compose-pool/sample-v1/meta.json"));
-      return dir;
-    } catch {
-      const parent = dirname(dir);
-      if (parent === dir) {
-        throw new Error("repo root with fixtures/compose-pool/sample-v1 not found");
-      }
-      dir = parent;
-    }
-  }
-}
+import { findRepoRoot, runCli } from "../src/main.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 

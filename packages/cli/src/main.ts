@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 import { access } from "node:fs/promises";
-import { dirname, isAbsolute, resolve } from "node:path";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { runBacktest } from "@sokai/backtest";
@@ -22,24 +22,39 @@ sokai preview --schema <file> [--bundle <dir>] [--port 5173]
 sokai backtest --bundle <dir> --schema <file> [--live] [--fail-fast] [--out report.json]
 `;
 
-async function resolveExisting(input: string): Promise<string> {
-  if (isAbsolute(input)) return input;
-  let dir = process.cwd();
+async function walkForMarker(start: string, marker: string): Promise<string | undefined> {
+  let dir = start;
   for (;;) {
-    const candidate = resolve(dir, input);
     try {
-      await access(candidate);
-      return candidate;
+      await access(join(dir, marker));
+      return dir;
     } catch {
       const parent = dirname(dir);
-      if (parent === dir) return resolve(process.cwd(), input);
+      if (parent === dir) return undefined;
       dir = parent;
     }
   }
 }
 
-function resolveOutput(input: string): string {
-  return isAbsolute(input) ? input : resolve(process.cwd(), input);
+/** Walk cwd (then this module) for `pnpm-workspace.yaml` or the sample fixture. */
+export async function findRepoRoot(start = process.cwd()): Promise<string> {
+  const starts = [start];
+  if (typeof import.meta.dirname === "string") {
+    starts.push(import.meta.dirname);
+  }
+  for (const from of starts) {
+    const found =
+      (await walkForMarker(from, "pnpm-workspace.yaml")) ??
+      (await walkForMarker(from, "fixtures/compose-pool/sample-v1"));
+    if (found) return found;
+  }
+  throw new Error("Could not find sokai repo root (pnpm-workspace.yaml)");
+}
+
+/** Absolute paths as-is; relative paths resolve against repo root, not cwd. */
+export async function resolveCliPath(input: string): Promise<string> {
+  if (isAbsolute(input)) return input;
+  return resolve(await findRepoRoot(), input);
 }
 
 function waitForSignal(): Promise<void> {
@@ -78,8 +93,10 @@ async function cmdRecord(argv: string[]): Promise<number> {
 
   const handle = await startRecording({
     url: values.url,
-    outDir: resolveOutput(values.out),
-    userDataDir: values["user-data-dir"],
+    outDir: await resolveCliPath(values.out),
+    userDataDir: values["user-data-dir"]
+      ? await resolveCliPath(values["user-data-dir"])
+      : undefined,
     pilotTag: values["pilot-tag"] ?? "compose-pool-list",
   });
   console.log("Recording… press Ctrl+C to stop");
@@ -108,10 +125,10 @@ async function cmdSchema(argv: string[]): Promise<number> {
     return 1;
   }
 
-  const schema = await buildPageSchemaFromBundle(await resolveExisting(values.bundle), {
+  const schema = await buildPageSchemaFromBundle(await resolveCliPath(values.bundle), {
     noLlm: values["no-llm"] === true,
   });
-  await writePageSchema(resolveOutput(values.out), schema);
+  await writePageSchema(await resolveCliPath(values.out), schema);
   return 0;
 }
 
@@ -138,8 +155,8 @@ async function cmdPreview(argv: string[]): Promise<number> {
     /* @vite-ignore */ "@sokai/runtime"
   );
   const handle = await startPreviewServer({
-    schemaPath: await resolveExisting(values.schema),
-    bundleDir: values.bundle ? await resolveExisting(values.bundle) : undefined,
+    schemaPath: await resolveCliPath(values.schema),
+    bundleDir: values.bundle ? await resolveCliPath(values.bundle) : undefined,
     port: values.port !== undefined ? Number(values.port) : 5173,
   });
   console.log(handle.baseUrl);
@@ -172,11 +189,11 @@ async function cmdBacktest(argv: string[]): Promise<number> {
   }
 
   const report = await runBacktest({
-    bundleDir: await resolveExisting(values.bundle),
-    schemaPath: await resolveExisting(values.schema),
+    bundleDir: await resolveCliPath(values.bundle),
+    schemaPath: await resolveCliPath(values.schema),
     mode: values.live ? "live" : "mock",
     failFast: values["fail-fast"] === true,
-    outPath: values.out ? resolveOutput(values.out) : undefined,
+    outPath: values.out ? await resolveCliPath(values.out) : undefined,
   });
   console.log(JSON.stringify(report.summary, null, 2));
   return report.summary.failed > 0 ? 1 : 0;
