@@ -87,13 +87,7 @@ function closeDialog() {
 
   <nav v-else-if="node.type === 'Pagination'" class="sokai-pagination" v-bind="hookAttrs">
     <SchemaRenderer v-for="child in node.children ?? []" :key="child.id" :node="child" />
-    <button
-      v-if="!(node.children?.length)"
-      type="button"
-      data-sokai-action="action-page-next"
-    >
-      下一页
-    </button>
+    <button v-if="!(node.children?.length)" type="button">下一页</button>
   </nav>
 
   <div

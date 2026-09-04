@@ -40,4 +40,33 @@ describe("installMockFetch", () => {
     restore = installMockFetch([], []);
     await expect(fetch("https://api.example.com/other")).rejects.toBeInstanceOf(MockMissError);
   });
+
+  it("matches POST dataSource when method is on Request", async () => {
+    restore = installMockFetch(
+      [
+        {
+          id: "poolList",
+          method: "POST",
+          urlPattern: "**/combinatePool/page**",
+          networkEntryId: "n1",
+        },
+      ],
+      [
+        {
+          id: "n1",
+          timestamp: 0,
+          method: "POST",
+          url: "https://api.example.com/combinatePool/page",
+          status: 200,
+          requestHeaders: {},
+          responseHeaders: { "content-type": "application/json" },
+          responseBody: '{"list":[1]}',
+        },
+      ],
+    );
+    const res = await fetch(
+      new Request("https://api.example.com/combinatePool/page", { method: "POST" }),
+    );
+    expect(await res.text()).toBe('{"list":[1]}');
+  });
 });

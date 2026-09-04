@@ -29,8 +29,12 @@ function matchesUrlPattern(pattern: string, url: string): boolean {
   return patternToRegExp(pattern).test(url);
 }
 
-function requestMethod(init?: RequestInit): string {
-  return (init?.method ?? "GET").toUpperCase();
+function requestMethod(input: RequestInfo | URL, init?: RequestInit): string {
+  if (init?.method) return init.method.toUpperCase();
+  if (typeof Request !== "undefined" && input instanceof Request) {
+    return (input.method || "GET").toUpperCase();
+  }
+  return "GET";
 }
 
 function requestUrl(input: RequestInfo | URL): string {
@@ -53,7 +57,7 @@ export function installMockFetch(
 
   globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     const url = requestUrl(input);
-    const method = requestMethod(init);
+    const method = requestMethod(input, init);
 
     const ds = dataSources.find(
       (item) =>

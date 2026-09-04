@@ -72,4 +72,19 @@ describe("mountPreview", () => {
     });
     expect(() => mountPreview(el, s, { mock: false })).not.toThrow();
   });
+
+  it("does not invent action-page-next on Pagination without actionId", () => {
+    const el = document.createElement("div");
+    const s = structuredClone(schema);
+    s.root.children!.push({
+      id: "region-pagination",
+      type: "Pagination",
+      provenance: "rule",
+      props: {},
+    });
+    const app = mountPreview(el, s, { mock: false });
+    expect(el.querySelector('[data-sokai-region="region-pagination"]')).toBeTruthy();
+    expect(el.querySelector('[data-sokai-action="action-page-next"]')).toBeNull();
+    app.unmount();
+  });
 });
