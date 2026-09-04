@@ -45,6 +45,25 @@ importers:
         specifier: 4.5.4
         version: 4.5.4
 
+  packages/record:
+    dependencies:
+      '@sokai/session':
+        specifier: workspace:*
+        version: link:../session
+      playwright:
+        specifier: 1.62.1
+        version: 1.62.1
+    devDependencies:
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.13.3
+      typescript:
+        specifier: ^5.8.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.7(@types/node@24.13.3)(msw@2.15.0(@types/node@24.13.3)(typescript@5.9.3))
+
   packages/session:
     dependencies:
       zod:
@@ -1933,7 +1952,7 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.63.1
       '@rollup/rollup-win32-x64-gnu': 4.63.1
       '@rollup/rollup-win32-x64-msvc': 4.63.1
-      fsevents: 2.3.2
+      fsevents: 2.3.3
 
   scheduler@0.27.0: {}
 
