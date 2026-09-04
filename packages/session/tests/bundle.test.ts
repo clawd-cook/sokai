@@ -7,6 +7,7 @@ import {
   readSessionBundle,
   writeSessionBundle,
 } from "../src/bundle.js";
+import { SESSION_BUNDLE_PATHS } from "../src/types.js";
 
 describe("session bundle IO", () => {
   it("writes and reads meta, actions, network, index", async () => {
@@ -90,5 +91,52 @@ describe("session bundle IO", () => {
     const { unlink } = await import("node:fs/promises");
     await unlink(join(dir, "actions.jsonl"));
     await expect(assertValidBundleDir(dir)).rejects.toThrow(/actions/i);
+  });
+
+  it("persists redacted network data on disk", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "sokai-redact-"));
+    await writeSessionBundle(dir, {
+      meta: {
+        schemaVersion: 1,
+        url: "https://example.com",
+        viewport: { width: 800, height: 600 },
+        startedAt: "2026-09-05T00:00:00.000Z",
+        endedAt: "2026-09-05T00:00:01.000Z",
+        pilotTag: "compose-pool-list",
+      },
+      actions: [
+        { id: "a1", timestamp: 0, type: "click", target: { strategy: "css", selector: "button" } },
+      ],
+      network: [
+        {
+          id: "n1",
+          timestamp: 1,
+          method: "POST",
+          url: "https://example.com/api/auth",
+          status: 200,
+          requestHeaders: { Authorization: "Bearer secret-token", cookie: "session=abc123" },
+          responseHeaders: { "set-cookie": "sid=xyz" },
+          requestBody: '{"token":"leaked-token","user":"alice"}',
+          responseBody: '{"password":"hidden-pass","ok":true}',
+        },
+      ],
+      index: { schemaVersion: 1, keyframes: [] },
+      keyframes: [],
+      domSnapshots: [],
+    });
+
+    const rawNetwork = await readFile(join(dir, SESSION_BUNDLE_PATHS.network), "utf8");
+    expect(rawNetwork).not.toContain("secret-token");
+    expect(rawNetwork).not.toContain("abc123");
+    expect(rawNetwork).not.toContain("xyz");
+    expect(rawNetwork).not.toContain("leaked-token");
+    expect(rawNetwork).not.toContain("hidden-pass");
+    expect(rawNetwork).toContain("[REDACTED]");
+
+    const loaded = await readSessionBundle(dir);
+    expect(loaded.network[0]?.requestHeaders.Authorization).toBe("[REDACTED]");
+    expect(loaded.network[0]?.requestHeaders.cookie).toBe("[REDACTED]");
+    expect(loaded.network[0]?.requestBody).toContain("[REDACTED]");
+    expect(loaded.network[0]?.requestBody).not.toContain("leaked-token");
   });
 });

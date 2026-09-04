@@ -52,6 +52,18 @@ export interface BundleIndex {
   }>;
 }
 
+/** Relative paths within a SessionBundle directory. */
+export const SESSION_BUNDLE_PATHS = {
+  meta: "meta.json",
+  actions: "actions.jsonl",
+  network: "network.jsonl",
+  index: "index.json",
+  keyframes: "keyframes",
+  dom: "dom",
+} as const;
+
+export type SessionBundlePaths = typeof SESSION_BUNDLE_PATHS;
+
 export type SchemaNodeType =
   | "Page"
   | "Heading"

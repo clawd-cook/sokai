@@ -2,6 +2,7 @@ export {
   SESSION_SCHEMA_VERSION,
   PAGE_SCHEMA_VERSION,
   REPORT_SCHEMA_VERSION,
+  SESSION_BUNDLE_PATHS,
 } from "./types.js";
 export type {
   LocatorHint,
@@ -10,6 +11,7 @@ export type {
   NetworkEntry,
   SessionMeta,
   BundleIndex,
+  SessionBundlePaths,
   SchemaNodeType,
   SchemaNode,
   DataSource,

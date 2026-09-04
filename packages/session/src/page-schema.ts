@@ -1,6 +1,5 @@
 import { writeFile } from "node:fs/promises";
 import { z } from "zod";
-import { PAGE_SCHEMA_VERSION } from "./types.js";
 import type { PageSchema } from "./types.js";
 
 const schemaNodeType = z.enum([
@@ -56,9 +55,5 @@ export function parsePageSchema(data: unknown): PageSchema {
 }
 
 export async function writePageSchema(path: string, schema: PageSchema): Promise<void> {
-  const normalized: PageSchema = {
-    ...schema,
-    schemaVersion: schema.schemaVersion ?? PAGE_SCHEMA_VERSION,
-  };
-  await writeFile(path, JSON.stringify(normalized, null, 2) + "\n", "utf8");
+  await writeFile(path, JSON.stringify(schema, null, 2) + "\n", "utf8");
 }
