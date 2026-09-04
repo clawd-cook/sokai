@@ -23,6 +23,7 @@ docs/       ← 规格与计划
 node -v    # 期望 v24.20.0（见 .node-version）
 pnpm -v    # 期望 11.23.0
 pnpm install
+pnpm playwright install   # 根依赖 playwright@1.62.1；浏览器已装到本机 ms-playwright 缓存
 pnpm --filter <package-name> <script>
 pnpm -r --if-present test
 ```
