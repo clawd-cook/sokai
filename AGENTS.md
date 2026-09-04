@@ -31,6 +31,7 @@ pnpm -r --if-present test
 
 ## 规范
 
+- 执行脚本 / shell 命令时**不要使用沙箱**（需完整网络与本地权限）。
 - 包级脚本与测试写在各自 `packages/*/package.json`；根目录只做 workspace 编排。
 - 改动代码时同步补测试（优先 Vitest）。
 - 不要提交密钥、token、未脱敏敏感数据。
