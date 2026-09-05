@@ -19,7 +19,7 @@ Commands:
 sokai record --url <url> --out <dir> [--user-data-dir <path>] [--pilot-tag compose-pool-list]
 sokai schema --bundle <dir> --out <file> [--no-llm]
 sokai preview --schema <file> [--bundle <dir>] [--port 5173]
-sokai backtest --bundle <dir> --schema <file> [--live] [--fail-fast] [--out report.json]
+sokai backtest --bundle <dir> (--schema <file> | --target-url <url>) [--live] [--fail-fast] [--out report.json]
 `;
 
 async function walkForMarker(start: string, marker: string): Promise<string | undefined> {
@@ -206,6 +206,7 @@ async function cmdBacktest(argv: string[]): Promise<number> {
     options: {
       bundle: { type: "string" },
       schema: { type: "string" },
+      "target-url": { type: "string" },
       live: { type: "boolean", default: false },
       "fail-fast": { type: "boolean", default: false },
       out: { type: "string" },
@@ -214,19 +215,20 @@ async function cmdBacktest(argv: string[]): Promise<number> {
   });
   if (values.help) {
     console.log(
-      "sokai backtest --bundle <dir> --schema <file> [--live] [--fail-fast] [--out report.json]",
+      "sokai backtest --bundle <dir> (--schema <file> | --target-url <url>) [--live] [--fail-fast] [--out report.json]",
     );
     return 0;
   }
-  if (!values.bundle || !values.schema) {
-    console.error("backtest requires --bundle and --schema");
+  if (!values.bundle || (!values.schema && !values["target-url"])) {
+    console.error("backtest requires --bundle and either --schema or --target-url");
     return 1;
   }
 
   const report = await runBacktest({
     bundleDir: await resolveCliPath(values.bundle),
-    schemaPath: await resolveCliPath(values.schema),
-    mode: values.live ? "live" : "mock",
+    schemaPath: values.schema ? await resolveCliPath(values.schema) : undefined,
+    targetUrl: values["target-url"],
+    mode: values.live ? "live" : values["target-url"] ? "live" : "mock",
     failFast: values["fail-fast"] === true,
     outPath: values.out ? await resolveCliPath(values.out) : undefined,
   });
