@@ -20,3 +20,9 @@ export interface PlaywrightDriverOptions {
   mode: "mock" | "live";
   headed?: boolean;
 }
+
+/** Live Chromium driver that navigates an already-running business URL. */
+export interface ExternalUrlDriverOptions {
+  targetUrl: string;
+  headed?: boolean;
+}

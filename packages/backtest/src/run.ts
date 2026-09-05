@@ -16,14 +16,42 @@ import {
 } from "./locate.js";
 import type { BacktestDriver } from "./types.js";
 
+export const DEFAULT_ACTION_IDS = [
+  "action-search",
+  "action-reset",
+  "action-export",
+  "action-open-blacklist-dialog",
+  "action-page-next",
+] as const;
+
 export interface RunBacktestOptions {
   bundleDir: string;
-  schemaPath: string;
+  schemaPath?: string;
+  targetUrl?: string;
+  knownActionIds?: Iterable<string>;
   mode?: "mock" | "live";
   failFast?: boolean;
   outPath?: string;
   /** Injected driver for tests; default is Playwright + startPreviewServer. */
   driver?: BacktestDriver;
+}
+
+export type BacktestTarget =
+  | { kind: "injected" }
+  | { kind: "external"; targetUrl: string }
+  | { kind: "preview"; schemaPath: string };
+
+/**
+ * Pure helper: pick injected driver, live targetUrl, or schema preview.
+ * Prefer targetUrl over schemaPath when both are set (business path).
+ */
+export function resolveBacktestTarget(
+  options: Pick<RunBacktestOptions, "driver" | "targetUrl" | "schemaPath">,
+): BacktestTarget {
+  if (options.driver) return { kind: "injected" };
+  if (options.targetUrl) return { kind: "external", targetUrl: options.targetUrl };
+  if (options.schemaPath) return { kind: "preview", schemaPath: options.schemaPath };
+  throw new Error("runBacktest requires schemaPath or targetUrl (or an injected driver)");
 }
 
 interface MockMissLike {
@@ -63,13 +91,18 @@ async function resolveDriver(
   options: RunBacktestOptions,
   mode: "mock" | "live",
 ): Promise<BacktestDriver> {
-  if (options.driver) return options.driver;
+  const target = resolveBacktestTarget(options);
+  if (target.kind === "injected") return options.driver!;
+  if (target.kind === "external") {
+    const { createExternalUrlDriver } = await import("./external-url-driver.js");
+    return createExternalUrlDriver({ targetUrl: target.targetUrl });
+  }
   // Dynamic + vite-ignore: unit tests must not load Vue/runtime mount paths.
   const { createPlaywrightDriver } = await import(
     /* @vite-ignore */ "./playwright-driver.js"
   );
   return createPlaywrightDriver({
-    schemaPath: options.schemaPath,
+    schemaPath: target.schemaPath,
     bundleDir: options.bundleDir,
     mode,
   });
@@ -79,14 +112,23 @@ async function resolveDriver(
  * Replay filtered session actions against a schema preview and write a BacktestReport.
  */
 export async function runBacktest(options: RunBacktestOptions): Promise<BacktestReport> {
-  const mode = options.mode ?? "mock";
+  const mode = options.mode ?? (options.targetUrl ? "live" : "mock");
   const failFast = options.failFast === true;
   const startedAt = new Date().toISOString();
 
-  const schema = await loadSchema(options.schemaPath);
+  let schemaActionIds: Set<string>;
+  let partialSchema = false;
+  let schema: PageSchema | undefined;
+  if (options.schemaPath) {
+    schema = await loadSchema(options.schemaPath);
+    schemaActionIds = collectActionIds(schema.root);
+    partialSchema = schema.partial === true;
+  } else {
+    schemaActionIds = new Set(options.knownActionIds ?? DEFAULT_ACTION_IDS);
+  }
+
   const bundle = await readSessionBundle(options.bundleDir);
   const actions = filterActions(bundle.actions);
-  const schemaActionIds = collectActionIds(schema.root);
 
   const driver = await resolveDriver(options, mode);
   const steps: StepResult[] = [];
@@ -164,7 +206,7 @@ export async function runBacktest(options: RunBacktestOptions): Promise<Backtest
     summary: {
       passed,
       failed,
-      partialSchema: schema.partial === true,
+      partialSchema,
     },
   };
 
