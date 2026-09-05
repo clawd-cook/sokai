@@ -20,9 +20,17 @@ pnpm sokai -- backtest --bundle fixtures/compose-pool/sample-v1 --schema /tmp/pa
 
 ## Business migrate backtest (pilot)
 
+Live marketing E2E is **not yet green**. A passing live run needs all of:
+
+1. Marketing **from this worktree** (not the main-repo checkout) so the migrated compose-pool page is served
+2. Vite `server.fs.allow` covering sokai `packages/` so the `file:` `@sokai/vue-renderer` path can load (`apps/yy-modules/apps/marketing/vite.config.ts`)
+3. A logged-in Chrome profile that can open the list URL
+
+v1 `page.spec.json` is hook/region ids + heading only; search/table binding stays in the page-local bound registry.
+
 ```bash
 pnpm --filter @sokai/vue-renderer build
-# start marketing compose-pool list from this worktree (logged-in profile as needed)
+# start worktree marketing compose-pool list (logged-in profile as needed)
 pnpm sokai -- backtest --bundle <SessionBundle> --target-url <marketing-list-url> --out /tmp/report.json
 ```
 

@@ -59,6 +59,18 @@ pnpm install
 
 If the workspace cannot resolve the path, try the parent `apps/yy-modules/package.json` and document the fallback.
 
+Vite must allow the sokai packages directory (outside the yy-modules workspace root), or `file:` will fail at runtime:
+
+```ts
+// apps/yy-modules/apps/marketing/vite.config.ts
+fs: {
+  allow: [
+    workspaceRoot,
+    path.resolve(__dirname, "../../../../packages"),
+  ],
+},
+```
+
 ## Migration steps
 
 ### Step 1 — Read source; map regions vs logic
@@ -72,6 +84,8 @@ Read `index.vue` and its hooks. Produce a short inventory:
 SessionBundle (if given): confirm the same regions/actions appear in recording — do not copy bundle JSON into the spec.
 
 ### Step 2 — Create `page.spec.json`
+
+**v1 Spec is hook/region ids + heading only.** Catalog types accept `regionId`, action ids, and `Heading.text`. Do **not** put `fields`, `columns`, query models, or table data in the spec — v1 catalog ignores them. Bind search/table/pagination state in a **page-local bound registry** (Step 4).
 
 json-render spec using `@sokai/vue-renderer` pilot catalog types. Import constants from the package — do not invent new ids.
 
@@ -95,7 +109,7 @@ json-render spec using `@sokai/vue-renderer` pilot catalog types. Import constan
 
 **Catalog types:** `Page`, `Heading`, `SearchForm`, `Table`, `Pagination`, `Button`, `Link`, `Unknown`.
 
-Minimal shape (expand column labels from the current template):
+Minimal shape (ids + heading; copy labels into the bound registry, not the spec):
 
 ```json
 {
@@ -165,10 +179,29 @@ export function createComposePoolListHandlers(options: {
 
 Adapt handler names/signatures per page; keep `PILOT_ACTION_IDS` keys.
 
-### Step 4 — Replace `index.vue` with thin shell
+### Step 4 — Page-local bound registry + thin `index.vue`
+
+**Business host pattern:** wrap `createJdesignRegistry()` in a page-local `createXxxBoundRegistry(page)` that overrides `SearchForm` / `Table` / `Pagination` (and heading chrome) to bind hook refs. Stock `createJdesignRegistry()` alone is only a **hook fallback** — it stamps `data-sokai-*` attrs but does not bind query/table/pagination data.
+
+Import `createJdesignRegistry` from `@sokai/vue-renderer/jdesign` (default `@sokai/vue-renderer` stays free of optional JdDesign peers). Use `sokaiActionAttrs` / `sokaiRegionAttrs` from the default entry.
+
+```typescript
+import { createJdesignRegistry } from "@sokai/vue-renderer/jdesign";
+import { sokaiActionAttrs, sokaiRegionAttrs } from "@sokai/vue-renderer";
+
+export function createComposePoolBoundRegistry(page: PageApi) {
+  const { registry } = createJdesignRegistry();
+  // define SearchForm / Table / Pagination that read page.query, page.tables, …
+  return { ...registry, Heading, SearchForm, Table, Pagination };
+}
+```
+
+See `apps/yy-modules/apps/marketing/src/views/coupon/composePool/list/bound-registry.ts`.
+
+Thin shell:
 
 - Call `useComposePoolListPage()` (or page composable) **unchanged**
-- `createJdesignRegistry()` from `@sokai/vue-renderer`
+- `createXxxBoundRegistry(page)` — not stock `createJdesignRegistry()`
 - Import `page.spec.json`
 - `createComposePoolListHandlers(...)` with dialog/export helpers
 - Wrap with `StateProvider` → `ActionProvider` → `Renderer` (add `VisibilityProvider` if needed)
@@ -178,11 +211,11 @@ Adapt handler names/signatures per page; keep `PILOT_ACTION_IDS` keys.
 ```vue
 <script setup lang="ts">
 import { ActionProvider, Renderer, StateProvider, VisibilityProvider } from "@json-render/vue";
-import { createJdesignRegistry } from "@sokai/vue-renderer";
 import spec from "./page.spec.json";
 import { createComposePoolListHandlers } from "./handlers";
+import { createComposePoolBoundRegistry } from "./bound-registry";
 // … composable, dialog ref, local helpers unchanged …
-const { registry } = createJdesignRegistry();
+const registry = createComposePoolBoundRegistry(page);
 const handlers = createComposePoolListHandlers({ page, openBlacklistUploadDialog, handleExport });
 </script>
 
@@ -199,7 +232,7 @@ const handlers = createComposePoolListHandlers({ page, openBlacklistUploadDialog
 </template>
 ```
 
-Bridge table/search state via `StateProvider` / refs as needed. Prefer full Spec rendering; hybrid table fallback only if JdDesign registry cannot bind data yet — note the gap, do not silently leave the old full template.
+Prefer full Spec rendering via the bound registry. Use stock `createJdesignRegistry()` only when you need hook attrs without data binding — note that gap; do not silently leave the old full template.
 
 ### Step 5 — Do not rewrite hook logic body
 
@@ -209,8 +242,11 @@ Bridge table/search state via `StateProvider` / refs as needed. Prefer full Spec
 
 - [ ] `region-search`, `region-table`, `region-pagination` present in spec or DOM output
 - [ ] All five pilot action ids wired in spec props and `handlers.ts`
+- [ ] Spec has heading + hook/region ids only (no unused `fields` / `columns`)
+- [ ] Page uses `createXxxBoundRegistry` wrapping `createJdesignRegistry` from `@sokai/vue-renderer/jdesign`
 - [ ] `pnpm --filter @sokai/vue-renderer build` succeeds
 - [ ] Marketing resolves `@sokai/vue-renderer` via `file:../../../../packages/vue-renderer`
+- [ ] Vite `server.fs.allow` includes sokai `packages/` so the `file:` path can load
 - [ ] Dialog still Vue; opens via handler
 - [ ] Hook/composable logic body untouched
 - [ ] Manual smoke: load, search, paginate, open dialog (`pnpm dev:marketing`)
@@ -238,6 +274,7 @@ Pilot script: enter page → search → next page → open Dialog → close.
 
 ## References
 
-- `@sokai/vue-renderer` exports: `PILOT_ACTION_IDS`, `PILOT_REGION_IDS`, `defineHandlers`, `createJdesignRegistry`, `sokaiPilotCatalog`
+- `@sokai/vue-renderer`: `PILOT_ACTION_IDS`, `PILOT_REGION_IDS`, `defineHandlers`, `createDomRegistry`, `sokaiPilotCatalog`
+- `@sokai/vue-renderer/jdesign`: `createJdesignRegistry` (optional JdDesign peers)
 - Mini fixture: `packages/vue-renderer/tests/fixtures/compose-pool-mini.spec.json`
 - Design spec §5.3: source-first split, SessionBundle for对照 only
