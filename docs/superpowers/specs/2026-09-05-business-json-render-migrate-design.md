@@ -152,7 +152,14 @@ composePool/list/
 | 录制 | 维持 Playwright/CDP；不用 rrweb |
 | `@sokai/runtime` | 本路径不需要、不扩展 |
 
-## 10. 后续（本规格不实现）
+## 10. 试点重做约定
+
+合成池列表首轮迁页验证通过后，若需回退业务仓并重做，**不改变**本规格的架构与成功标准，仅收紧协作与干净落地：
+
+- 细则见 `docs/superpowers/specs/2026-09-05-compose-pool-migrate-redo-design.md`  
+- 执行以 `.agents/skills/sokai-migrate-page` 为准：清单硬门禁 → 分文件审批；业务页禁止直连 `@json-render/vue`；禁止无清单的整页重写式 bound registry  
+
+## 11. 后续（本规格不实现）
 
 1. Dialog / 复杂子树配置化  
 2. rrweb 作为可选对照层  
