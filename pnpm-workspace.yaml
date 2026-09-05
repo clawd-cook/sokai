@@ -2,8 +2,11 @@ packages:
   - "packages/*"
 
 allowBuilds:
+  '@jd/jdesign-vue': true
+  '@jd/jdesign-vue-pro': true
   esbuild: true
   msw: true
+  vue-demi: true
 
 registry:
   default: http://registry.m.jd.com/
