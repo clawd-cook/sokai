@@ -151,9 +151,9 @@ async function cmdPreview(argv: string[]): Promise<number> {
     return 1;
   }
 
-  const { startPreviewServer } = await import(
-    /* @vite-ignore */ "@sokai/runtime"
-  );
+  // Import server-only entry — the package root re-exports mountPreview (.vue),
+  // which Node/tsx cannot load. Vite inside startPreviewServer compiles Vue.
+  const { startPreviewServer } = await import("@sokai/runtime/server");
   const handle = await startPreviewServer({
     schemaPath: await resolveCliPath(values.schema),
     bundleDir: values.bundle ? await resolveCliPath(values.bundle) : undefined,

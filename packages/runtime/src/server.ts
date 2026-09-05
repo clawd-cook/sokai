@@ -64,6 +64,15 @@ export async function startPreviewServer(
   const server: ViteDevServer = await createServer({
     configFile: false,
     root: packageRoot,
+    resolve: {
+      // Client graph must not pull Node-only @sokai/session barrel (bundle.ts → fs).
+      alias: {
+        "@sokai/session": fileURLToPath(
+          new URL("../../session/src/browser.ts", import.meta.url),
+        ),
+      },
+      conditions: ["browser", "module", "import", "default"],
+    },
     plugins: [
       vue(),
       {

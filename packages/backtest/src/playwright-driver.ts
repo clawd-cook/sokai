@@ -1,6 +1,9 @@
 import type { LocatorHint } from "@sokai/session";
 import { chromium, type Browser, type Page } from "playwright";
-import { startPreviewServer, type PreviewServerHandle } from "@sokai/runtime";
+import {
+  startPreviewServer,
+  type PreviewServerHandle,
+} from "@sokai/runtime/server";
 import {
   MOCK_MISS_BINDING,
   MockMissSink,
@@ -96,8 +99,17 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
         }
       });
 
-      await page.goto(server.baseUrl, { waitUntil: "domcontentloaded" });
-      await page.waitForSelector(PREVIEW_READY_SELECTOR, { timeout: 10_000 });
+      await page.goto(server.baseUrl, { waitUntil: "networkidle" });
+      try {
+        await page.waitForSelector(PREVIEW_READY_SELECTOR, { timeout: 30_000 });
+      } catch (err) {
+        const body = await page.locator("body").innerText().catch(() => "(no body)");
+        throw new Error(
+          `Preview hooks not ready (${PREVIEW_READY_SELECTOR}). Page body:\n${body}\nCause: ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+        );
+      }
       await page.evaluate(wrapPreviewFetchForMockMiss);
       // Drop load-time pageerror/console misses so they cannot poison step 1.
       sink.beginStep();

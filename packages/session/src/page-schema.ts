@@ -1,4 +1,3 @@
-import { writeFile } from "node:fs/promises";
 import { z } from "zod";
 import type { PageSchema } from "./types.js";
 
@@ -55,5 +54,6 @@ export function parsePageSchema(data: unknown): PageSchema {
 }
 
 export async function writePageSchema(path: string, schema: PageSchema): Promise<void> {
+  const { writeFile } = await import("node:fs/promises");
   await writeFile(path, JSON.stringify(schema, null, 2) + "\n", "utf8");
 }
