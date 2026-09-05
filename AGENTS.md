@@ -2,7 +2,7 @@
 
 ## 项目概览
 
-**Sokai（溯洄）**：页面「录制 → Schema → 回测」工具链的 monorepo。产品方向见 `docs/superpowers/`；当前迭代规格与计划见 `docs/superpowers/specs/2026-09-05-record-schema-backtest-design.md`、`docs/superpowers/plans/2026-09-05-record-schema-backtest.md`；离线 smoke 见 `README.md`。
+**Sokai（溯洄）**：页面「录制 → Schema → 回测」工具链的 monorepo。产品方向见 `docs/superpowers/`；当前迭代规格与计划见 `docs/superpowers/specs/`、`docs/superpowers/plans/`；离线 smoke 见 `README.md`。
 
 技术栈：Node.js `24.20.0`、pnpm `11.23.0`、TypeScript。
 
@@ -19,13 +19,31 @@ docs/       ← 规格与计划
 
 ## 环境与常用命令
 
+### Node 版本（必读）
+
+本仓库锁定 **Node.js `v24.20.0`**（见 `.node-version` / `.nvmrc`）。
+
+- **必须用 nvm 的 24**，不要用 Homebrew（或其它路径）自带的 Node（本机常见为 `/opt/homebrew/bin/node` → v26.x）。
+- 每个新 shell / agent 会话开工前先切版本并核对：
+
 ```bash
-node -v    # 期望 v24.20.0（见 .node-version）
+export NVM_DIR="$HOME/.nvm"
+. "$NVM_DIR/nvm.sh"
+nvm use          # 读 .nvmrc → v24.20.0；若失败：nvm install 24.20.0 && nvm use
+which node       # 期望 …/.nvm/versions/node/v24.20.0/bin/node
+node -v          # 期望 v24.20.0
+# 若 which node 仍是 /opt/homebrew/bin/node，说明 nvm 未生效，不要继续装依赖或跑测试
+```
+
+### 依赖与脚本
+
+```bash
 pnpm -v    # 期望 11.23.0
 pnpm install
 pnpm playwright install   # 根依赖 playwright@1.62.1；浏览器已装到本机 ms-playwright 缓存
 pnpm --filter <package-name> <script>
 pnpm -r --if-present test
+pnpm sokai -- <cli-args>  # 根脚本 → @sokai/cli
 ```
 
 私有源默认：`http://registry.m.jd.com/`（`pnpm-workspace.yaml`）。
