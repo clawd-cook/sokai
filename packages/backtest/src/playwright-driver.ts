@@ -13,6 +13,7 @@ import {
   wrapPreviewFetchForMockMiss,
   type MockMissPayload,
 } from "./page-bridge.js";
+import { sokaiActionLocator } from "./action-locator.js";
 import type { BacktestDriver, PlaywrightDriverOptions } from "./types.js";
 
 export type { PlaywrightDriverOptions };
@@ -118,8 +119,7 @@ export function createPlaywrightDriver(options: PlaywrightDriverOptions): Backte
     async clickAction(actionId: string) {
       if (!page) throw new Error("Playwright driver not started");
       beginUserAction();
-      const selector = `[data-sokai-action="${actionId}"]`;
-      await page.locator(selector).click({ timeout: 5000 });
+      await sokaiActionLocator(page, actionId).click({ timeout: 5000 });
       await settleAndThrowMockMiss();
     },
 

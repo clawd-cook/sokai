@@ -1,5 +1,6 @@
 import type { LocatorHint } from "@sokai/session";
 import { chromium, type Browser, type Page } from "playwright";
+import { sokaiActionLocator } from "./action-locator.js";
 import type { BacktestDriver, ExternalUrlDriverOptions } from "./types.js";
 
 export type { ExternalUrlDriverOptions };
@@ -36,7 +37,7 @@ export function createExternalUrlDriver(options: ExternalUrlDriverOptions): Back
 
     async clickAction(actionId: string) {
       if (!page) throw new Error("External URL driver not started");
-      await page.locator(`[data-sokai-action="${actionId}"]`).click({ timeout: 5000 });
+      await sokaiActionLocator(page, actionId).click({ timeout: 5000 });
     },
 
     async click(hint: LocatorHint) {
