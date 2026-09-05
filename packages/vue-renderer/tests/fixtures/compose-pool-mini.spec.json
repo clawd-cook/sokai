@@ -1,0 +1,37 @@
+{
+  "root": "page",
+  "elements": {
+    "page": {
+      "type": "Page",
+      "props": {},
+      "children": ["title", "search", "table", "pager"]
+    },
+    "title": {
+      "type": "Heading",
+      "props": { "text": "合成池管理" }
+    },
+    "search": {
+      "type": "SearchForm",
+      "props": {
+        "regionId": "region-search",
+        "searchActionId": "action-search",
+        "resetActionId": "action-reset"
+      }
+    },
+    "table": {
+      "type": "Table",
+      "props": {
+        "regionId": "region-table",
+        "exportActionId": "action-export",
+        "updateActionId": "action-open-blacklist-dialog"
+      }
+    },
+    "pager": {
+      "type": "Pagination",
+      "props": {
+        "regionId": "region-pagination",
+        "nextActionId": "action-page-next"
+      }
+    }
+  }
+}

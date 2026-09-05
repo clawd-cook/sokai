@@ -202,6 +202,9 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^5.2.0
         version: 5.2.4(vite@6.4.3(@types/node@24.13.3)(tsx@4.23.13))(vue@3.5.42(typescript@5.9.3))
+      '@vue/test-utils':
+        specifier: ^2.4.0
+        version: 2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@5.9.3))
       happy-dom:
         specifier: ^17.0.0
         version: 17.6.3
@@ -757,6 +760,9 @@ packages:
     os: [linux]
     libc: [glibc]
 
+  '@one-ini/wasm@0.2.1':
+    resolution: {integrity: sha1-XoXLtDNGCyOqoYrAJM0aVW6eXfk=, tarball: http://registry.m.jd.com/@one-ini/wasm/download/@one-ini/wasm-0.2.1.tgz}
+
   '@open-draft/deferred-promise@2.2.0':
     resolution: {integrity: sha1-SoItEPbw4xa+TWe01PjJoSSwc70=, tarball: http://registry.m.jd.com/@open-draft/deferred-promise/download/@open-draft/deferred-promise-2.2.0.tgz}
 
@@ -1149,6 +1155,13 @@ packages:
   '@vue/shared@3.5.42':
     resolution: {integrity: sha1-pBPPISYlAmYjVM2jtlqzG8qXkgI=, tarball: http://registry.m.jd.com/@vue/shared/download/@vue/shared-3.5.42.tgz}
 
+  '@vue/test-utils@2.5.0':
+    resolution: {integrity: sha1-1jtZeT0p/foX7hlt9qUHN7lL2Oc=, tarball: http://registry.m.jd.com/@vue/test-utils/download/@vue/test-utils-2.5.0.tgz}
+    peerDependencies:
+      '@vue/compiler-dom': 3.x
+      '@vue/server-renderer': 3.x
+      vue: 3.x
+
   '@vueuse/core@8.9.4':
     resolution: {integrity: sha1-x9tA8ZOQs8n0/5KUowRhSX9i7Bk=, tarball: http://registry.m.jd.com/@vueuse/core/download/@vueuse/core-8.9.4.tgz}
     peerDependencies:
@@ -1309,6 +1322,10 @@ packages:
   '@yuku-toolchain/types@0.9.3':
     resolution: {integrity: sha512-rFE+5P4g2wxko5C85MugJOlVjBHEQq87dIkhLkniLXLp63PEtgaFjD954i5HXlfnyzLxPcZHsSOVDVgmo1HToA==}
 
+  abbrev@5.0.0:
+    resolution: {integrity: sha1-urcIBa3KZjejPu7NuLe1R01tZCU=, tarball: http://registry.m.jd.com/abbrev/download/abbrev-5.0.0.tgz}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
+
   aes-decrypter@4.0.2:
     resolution: {integrity: sha1-kGSBgcaIePVAk5IKO0R3bsLcSRQ=, tarball: http://registry.m.jd.com/aes-decrypter/download/aes-decrypter-4.0.2.tgz}
 
@@ -1333,10 +1350,18 @@ packages:
   async-validator@4.2.5:
     resolution: {integrity: sha1-yW6jMypSFpnQr6rO7VEKVGVsYzk=, tarball: http://registry.m.jd.com/async-validator/download/async-validator-4.2.5.tgz}
 
+  balanced-match@4.0.4:
+    resolution: {integrity: sha1-v7EGYv7tgZaixi58aOF3IMJ0F5o=, tarball: http://registry.m.jd.com/balanced-match/download/balanced-match-4.0.4.tgz}
+    engines: {node: 18 || 20 || >=22}
+
   baseline-browser-mapping@2.11.21:
     resolution: {integrity: sha1-ma9zy45UAH5PU0XhMieOJsJmLyw=, tarball: http://registry.m.jd.com/baseline-browser-mapping/download/baseline-browser-mapping-2.11.21.tgz}
     engines: {node: '>=6.0.0'}
     hasBin: true
+
+  brace-expansion@5.0.9:
+    resolution: {integrity: sha1-fHJDiAm1+lur9UGZofHCgaaYT88=, tarball: http://registry.m.jd.com/brace-expansion/download/brace-expansion-5.0.9.tgz}
+    engines: {node: 20 || >=22}
 
   browserslist@4.28.8:
     resolution: {integrity: sha1-o8ec63AChSfl2n2vyIfzIAtRaMA=, tarball: http://registry.m.jd.com/browserslist/download/browserslist-4.28.8.tgz}
@@ -1377,6 +1402,13 @@ packages:
   color-name@1.1.4:
     resolution: {integrity: sha1-wqCah6y95pVD3m9j+jmVyCbFNqI=, tarball: http://registry.m.jd.com/color-name/download/color-name-1.1.4.tgz}
 
+  commander@14.0.3:
+    resolution: {integrity: sha1-Ql15tI+a+C/Nnk/B6or2xewHu8I=, tarball: http://registry.m.jd.com/commander/download/commander-14.0.3.tgz}
+    engines: {node: '>=20'}
+
+  config-chain@1.1.13:
+    resolution: {integrity: sha1-+tB5Wqamza/57Rto6d/5Q3LCMvQ=, tarball: http://registry.m.jd.com/config-chain/download/config-chain-1.1.13.tgz}
+
   convert-source-map@2.0.0:
     resolution: {integrity: sha1-S1YPZJ/E6RjdCrdc9JYei8iC2Co=, tarball: http://registry.m.jd.com/convert-source-map/download/convert-source-map-2.0.0.tgz}
 
@@ -1409,6 +1441,11 @@ packages:
     engines: {node: ^22.18.0 || >=24.0.0}
     peerDependencies:
       oxc-resolver: '>=11.0.0'
+
+  editorconfig@3.0.2:
+    resolution: {integrity: sha1-B43/iIs9syhvO9nP+YnmciZ6IpE=, tarball: http://registry.m.jd.com/editorconfig/download/editorconfig-3.0.2.tgz}
+    engines: {node: '>=20'}
+    hasBin: true
 
   electron-to-chromium@1.5.420:
     resolution: {integrity: sha1-/GbSanItbyJ+IJKs3zjdVbGYy0Q=, tarball: http://registry.m.jd.com/electron-to-chromium/download/electron-to-chromium-1.5.420.tgz}
@@ -1495,6 +1532,10 @@ packages:
     resolution: {integrity: sha1-6g/f9y7JUtFaNO+JrklGsJIcihU=, tarball: http://registry.m.jd.com/get-tsconfig/download/get-tsconfig-5.0.0-beta.6.tgz}
     engines: {node: '>=20.20.0'}
 
+  glob@13.0.6:
+    resolution: {integrity: sha1-B4ZmVmpCUUfMrPvS4zLetmor5x0=, tarball: http://registry.m.jd.com/glob/download/glob-13.0.6.tgz}
+    engines: {node: 18 || 20 || >=22}
+
   global@4.4.0:
     resolution: {integrity: sha1-PnsQUXkAajI+1xqvyj6cV6XMZAY=, tarball: http://registry.m.jd.com/global/download/global-4.4.0.tgz}
 
@@ -1522,6 +1563,9 @@ packages:
     resolution: {integrity: sha1-WxRxekK6CdmynjS0nw4s/xtgRss=, tarball: http://registry.m.jd.com/import-without-cache/download/import-without-cache-0.4.0.tgz}
     engines: {node: ^22.18.0 || >=24.0.0}
 
+  ini@1.3.8:
+    resolution: {integrity: sha1-op2kJbSIBvNHZ6Tvzjlyaa8oQyw=, tarball: http://registry.m.jd.com/ini/download/ini-1.3.8.tgz}
+
   is-fullwidth-code-point@3.0.0:
     resolution: {integrity: sha1-8Rb4Bk/pCz94RKOJl8C3UFEmnx0=, tarball: http://registry.m.jd.com/is-fullwidth-code-point/download/is-fullwidth-code-point-3.0.0.tgz}
     engines: {node: '>=8'}
@@ -1540,6 +1584,14 @@ packages:
       '@babel/template': '>=7.0.0'
       '@types/react': '>=17.0.0'
       react: '>=17.0.0'
+
+  js-beautify@2.0.3:
+    resolution: {integrity: sha1-dzxqPPUecs6Z3wRYqVc+BqVi/tE=, tarball: http://registry.m.jd.com/js-beautify/download/js-beautify-2.0.3.tgz}
+    engines: {node: '>=14'}
+    hasBin: true
+
+  js-cookie@3.0.8:
+    resolution: {integrity: sha1-RE5vSyel2ERZT+9hyda8pfB4dog=, tarball: http://registry.m.jd.com/js-cookie/download/js-cookie-3.0.8.tgz}
 
   js-tokens@10.0.0:
     resolution: {integrity: sha1-3/51mbSou3/jCv+NAjUjTf+3mDE=, tarball: http://registry.m.jd.com/js-tokens/download/js-tokens-10.0.0.tgz}
@@ -1592,6 +1644,14 @@ packages:
   min-document@2.19.2:
     resolution: {integrity: sha1-+V20RjnqrjrI6oWuaAmuhf9+O4E=, tarball: http://registry.m.jd.com/min-document/download/min-document-2.19.2.tgz}
 
+  minimatch@10.2.6:
+    resolution: {integrity: sha1-/ZVrvgt3JB6fFaxdzLHGOAYJaO8=, tarball: http://registry.m.jd.com/minimatch/download/minimatch-10.2.6.tgz}
+    engines: {node: 18 || 20 || >=22}
+
+  minipass@7.1.3:
+    resolution: {integrity: sha1-eTibTrG7LQA6m7qH1JLyvTe9xls=, tarball: http://registry.m.jd.com/minipass/download/minipass-7.1.3.tgz}
+    engines: {node: '>=16 || 14 >=14.17'}
+
   mpd-parser@1.4.0:
     resolution: {integrity: sha1-P7yPaxxQWyXQ8KeQgqZ2WQj+FC0=, tarball: http://registry.m.jd.com/mpd-parser/download/mpd-parser-1.4.0.tgz}
     hasBin: true
@@ -1624,6 +1684,11 @@ packages:
     resolution: {integrity: sha1-Ca8X1WR6qfIh7FzyvsuVtoqYGv4=, tarball: http://registry.m.jd.com/node-releases/download/node-releases-2.0.54.tgz}
     engines: {node: '>=18'}
 
+  nopt@10.0.1:
+    resolution: {integrity: sha1-LVO/2lBLMcRHlnZIul6hpE5ZTQU=, tarball: http://registry.m.jd.com/nopt/download/nopt-10.0.1.tgz}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
+    hasBin: true
+
   normalize-wheel-es@1.2.0:
     resolution: {integrity: sha1-D6JZPWGfckWlQWUmGRBasHas8J4=, tarball: http://registry.m.jd.com/normalize-wheel-es/download/normalize-wheel-es-1.2.0.tgz}
 
@@ -1639,6 +1704,10 @@ packages:
 
   oxc-resolver@11.24.2:
     resolution: {integrity: sha1-hcCNn1eX5gAXX6hSTS0nHGhdl88=, tarball: http://registry.m.jd.com/oxc-resolver/download/oxc-resolver-11.24.2.tgz}
+
+  path-scurry@2.0.2:
+    resolution: {integrity: sha1-a+DQ7gKhDZ4N56mLrmXhgskGH4U=, tarball: http://registry.m.jd.com/path-scurry/download/path-scurry-2.0.2.tgz}
+    engines: {node: 18 || 20 || >=22}
 
   path-to-regexp@6.3.0:
     resolution: {integrity: sha1-K2omozdzeo4UFvknLtB2axwDifQ=, tarball: http://registry.m.jd.com/path-to-regexp/download/path-to-regexp-6.3.0.tgz}
@@ -1678,6 +1747,9 @@ packages:
   process@0.11.10:
     resolution: {integrity: sha1-czIwDoQBYb2j5podHZGn1LwW8YI=, tarball: http://registry.m.jd.com/process/download/process-0.11.10.tgz}
     engines: {node: '>= 0.6.0'}
+
+  proto-list@1.2.4:
+    resolution: {integrity: sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=, tarball: http://registry.m.jd.com/proto-list/download/proto-list-1.2.4.tgz}
 
   quansync@1.0.0:
     resolution: {integrity: sha1-HCmszNVEzWjZenNQxQmeCpvH5e4=, tarball: http://registry.m.jd.com/quansync/download/quansync-1.0.0.tgz}
@@ -1987,6 +2059,9 @@ packages:
         optional: true
       jsdom:
         optional: true
+
+  vue-component-type-helpers@3.3.11:
+    resolution: {integrity: sha1-svaDk350TPVyTGFJVd/5vDI0L7Q=, tarball: http://registry.m.jd.com/vue-component-type-helpers/download/vue-component-type-helpers-3.3.11.tgz}
 
   vue-demi@0.14.10:
     resolution: {integrity: sha1-r8eN49b54Rv3jFXoUQ7hKBRSLwQ=, tarball: http://registry.m.jd.com/vue-demi/download/vue-demi-0.14.10.tgz}
@@ -2494,6 +2569,8 @@ snapshots:
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
 
+  '@one-ini/wasm@0.2.1': {}
+
   '@open-draft/deferred-promise@2.2.0': {}
 
   '@open-draft/deferred-promise@3.0.0': {}
@@ -2812,6 +2889,14 @@ snapshots:
 
   '@vue/shared@3.5.42': {}
 
+  '@vue/test-utils@2.5.0(@vue/compiler-dom@3.5.42)(@vue/server-renderer@3.5.42)(vue@3.5.42(typescript@5.9.3))':
+    dependencies:
+      '@vue/compiler-dom': 3.5.42
+      '@vue/server-renderer': 3.5.42
+      js-beautify: 2.0.3
+      vue: 3.5.42(typescript@5.9.3)
+      vue-component-type-helpers: 3.3.11
+
   '@vueuse/core@8.9.4(@vue/composition-api@1.7.2(vue@3.5.42(typescript@5.9.3)))(vue@3.5.42(typescript@5.9.3))':
     dependencies:
       '@types/web-bluetooth': 0.0.14
@@ -2909,6 +2994,8 @@ snapshots:
 
   '@yuku-toolchain/types@0.9.3': {}
 
+  abbrev@5.0.0: {}
+
   aes-decrypter@4.0.2:
     dependencies:
       '@babel/runtime': 7.29.7
@@ -2933,7 +3020,13 @@ snapshots:
 
   async-validator@4.2.5: {}
 
+  balanced-match@4.0.4: {}
+
   baseline-browser-mapping@2.11.21: {}
+
+  brace-expansion@5.0.9:
+    dependencies:
+      balanced-match: 4.0.4
 
   browserslist@4.28.8:
     dependencies:
@@ -2973,6 +3066,13 @@ snapshots:
 
   color-name@1.1.4: {}
 
+  commander@14.0.3: {}
+
+  config-chain@1.1.13:
+    dependencies:
+      ini: 1.3.8
+      proto-list: 1.2.4
+
   convert-source-map@2.0.0: {}
 
   cookie@1.1.1: {}
@@ -2994,6 +3094,13 @@ snapshots:
   dts-resolver@3.0.0(oxc-resolver@11.24.2):
     dependencies:
       oxc-resolver: 11.24.2
+
+  editorconfig@3.0.2:
+    dependencies:
+      '@one-ini/wasm': 0.2.1
+      commander: 14.0.3
+      minimatch: 10.2.6
+      semver: 7.8.5
 
   electron-to-chromium@1.5.420: {}
 
@@ -3105,6 +3212,12 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
+  glob@13.0.6:
+    dependencies:
+      minimatch: 10.2.6
+      minipass: 7.1.3
+      path-scurry: 2.0.2
+
   global@4.4.0:
     dependencies:
       min-document: 2.19.2
@@ -3130,6 +3243,8 @@ snapshots:
 
   import-without-cache@0.4.0: {}
 
+  ini@1.3.8: {}
+
   is-fullwidth-code-point@3.0.0: {}
 
   is-function@1.0.2: {}
@@ -3142,6 +3257,16 @@ snapshots:
       '@babel/template': 8.0.0
       '@types/react': 19.2.18
       react: 19.2.8
+
+  js-beautify@2.0.3:
+    dependencies:
+      config-chain: 1.1.13
+      editorconfig: 3.0.2
+      glob: 13.0.6
+      js-cookie: 3.0.8
+      nopt: 10.0.1
+
+  js-cookie@3.0.8: {}
 
   js-tokens@10.0.0: {}
 
@@ -3182,6 +3307,12 @@ snapshots:
   min-document@2.19.2:
     dependencies:
       dom-walk: 0.1.2
+
+  minimatch@10.2.6:
+    dependencies:
+      brace-expansion: 5.0.9
+
+  minipass@7.1.3: {}
 
   mpd-parser@1.4.0:
     dependencies:
@@ -3227,6 +3358,10 @@ snapshots:
 
   node-releases@2.0.54: {}
 
+  nopt@10.0.1:
+    dependencies:
+      abbrev: 5.0.0
+
   normalize-wheel-es@1.2.0: {}
 
   nprogress@0.2.0: {}
@@ -3238,6 +3373,11 @@ snapshots:
   oxc-resolver@11.24.2:
     optionalDependencies:
       '@oxc-resolver/binding-darwin-arm64': 11.24.2
+
+  path-scurry@2.0.2:
+    dependencies:
+      lru-cache: 11.5.2
+      minipass: 7.1.3
 
   path-to-regexp@6.3.0: {}
 
@@ -3268,6 +3408,8 @@ snapshots:
       source-map-js: 1.2.1
 
   process@0.11.10: {}
+
+  proto-list@1.2.4: {}
 
   quansync@1.0.0: {}
 
@@ -3577,6 +3719,8 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  vue-component-type-helpers@3.3.11: {}
 
   vue-demi@0.14.10(@vue/composition-api@1.7.2(vue@3.5.42(typescript@5.9.3)))(vue@3.5.42(typescript@5.9.3)):
     dependencies:

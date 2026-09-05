@@ -6,4 +6,6 @@ export {
   sokaiActionAttrs,
   sokaiRegionAttrs,
 } from "./attrs.js";
+export { sokaiPilotCatalog } from "./catalog.js";
 export { defineHandlers, type HandlerFn } from "./handlers.js";
+export { createDomRegistry } from "./registry-dom.js";
