@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { createServer as createNetServer } from "node:net";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer, type ViteDevServer } from "vite";
@@ -37,6 +38,25 @@ function resolvePackageRoot(): string {
   }
 }
 
+/** Vite treats missing/0 oddly; bind an ephemeral port ourselves when needed. */
+async function resolveListenPort(port: number | undefined): Promise<number> {
+  if (port !== undefined && port !== 0) return port;
+  return await new Promise<number>((resolve, reject) => {
+    const probe = createNetServer();
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", () => {
+      const addr = probe.address();
+      if (!addr || typeof addr === "string") {
+        probe.close();
+        reject(new Error("failed to allocate ephemeral port"));
+        return;
+      }
+      const chosen = addr.port;
+      probe.close((err) => (err ? reject(err) : resolve(chosen)));
+    });
+  });
+}
+
 /**
  * Start a Vite preview/dev server that serves the Vue schema runtime.
  * Schema is exposed at `/schema.json`; optional network at `/network.json`.
@@ -60,6 +80,7 @@ export async function startPreviewServer(
 
   const mockEnabled = options.mock !== false;
   const networkJson = JSON.stringify(network);
+  const listenPort = await resolveListenPort(options.port);
 
   const server: ViteDevServer = await createServer({
     configFile: false,
@@ -99,14 +120,16 @@ export async function startPreviewServer(
       "import.meta.env.SOKAI_MOCK": JSON.stringify(mockEnabled),
     },
     server: {
-      port: options.port ?? 0,
-      strictPort: options.port !== undefined && options.port !== 0,
+      port: listenPort,
+      strictPort: true,
+      host: "127.0.0.1",
     },
   });
 
   await server.listen();
   const urls = server.resolvedUrls;
-  const baseUrl = urls?.local[0]?.replace(/\/$/, "") ?? `http://127.0.0.1:${options.port ?? 0}`;
+  const baseUrl =
+    urls?.local[0]?.replace(/\/$/, "") ?? `http://127.0.0.1:${listenPort}`;
 
   return {
     baseUrl,
