@@ -57,6 +57,39 @@ export async function resolveCliPath(input: string): Promise<string> {
   return resolve(await findRepoRoot(), input);
 }
 
+/** Wait until the user presses Enter, or Ctrl+C / SIGTERM. */
+function waitForRecordingStop(): Promise<void> {
+  return new Promise((resolveWait) => {
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      try {
+        process.stdin.pause();
+      } catch {
+        // ignore
+      }
+      process.stdin.off("data", onData);
+      process.off("SIGINT", onSig);
+      process.off("SIGTERM", onSig);
+      resolveWait();
+    };
+    const onData = (chunk: Buffer | string) => {
+      const text = typeof chunk === "string" ? chunk : chunk.toString("utf8");
+      if (text.includes("\n") || text.includes("\r")) done();
+    };
+    const onSig = () => done();
+
+    if (process.stdin.isTTY) {
+      process.stdin.resume();
+      process.stdin.setEncoding("utf8");
+      process.stdin.on("data", onData);
+    }
+    process.on("SIGINT", onSig);
+    process.on("SIGTERM", onSig);
+  });
+}
+
 function waitForSignal(): Promise<void> {
   return new Promise((resolveWait) => {
     const onStop = () => {
@@ -99,8 +132,10 @@ async function cmdRecord(argv: string[]): Promise<number> {
       : undefined,
     pilotTag: values["pilot-tag"] ?? "compose-pool-list",
   });
-  console.log("Recording… press Ctrl+C to stop");
-  await waitForSignal();
+  console.log("Recording… operate in the Chrome window.");
+  console.log("When finished, press Enter here to save the session (prefer Enter over Ctrl+C).");
+  await waitForRecordingStop();
+  console.log("Stopping… writing session bundle (do not interrupt)");
   const dir = await handle.stop();
   console.log(`Wrote session bundle: ${dir}`);
   return 0;
