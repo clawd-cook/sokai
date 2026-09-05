@@ -18,6 +18,16 @@ pnpm sokai -- preview --schema /tmp/page.schema.json --bundle fixtures/compose-p
 pnpm sokai -- backtest --bundle fixtures/compose-pool/sample-v1 --schema /tmp/page.schema.json
 ```
 
+## Business migrate backtest (pilot)
+
+```bash
+pnpm --filter @sokai/vue-renderer build
+# start marketing compose-pool list from this worktree (logged-in profile as needed)
+pnpm sokai -- backtest --bundle <SessionBundle> --target-url <marketing-list-url> --out /tmp/report.json
+```
+
+Example bundle: `fixtures/compose-pool/sample-v1`. Target URL must be the migrated compose-pool list page (with `data-sokai-action` / `data-sokai-region` hooks).
+
 ## 录制合成池试点
 
 ```bash
