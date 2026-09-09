@@ -1,5 +1,7 @@
 # Sokai（溯洄）
 
+> **本项目已废弃。** Json 标准尚未定下来，当前仓库不再继续开发。
+
 录制 → Schema → 回测。规格：`docs/superpowers/specs/2026-09-05-record-schema-backtest-design.md`。
 
 ## 开发
